@@ -3,8 +3,6 @@
 #include "Aircraft.hpp"
 #include "SpriteNode.h"
 
-
-
 class World 
 {
 public:

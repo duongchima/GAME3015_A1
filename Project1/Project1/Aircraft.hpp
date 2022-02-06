@@ -19,7 +19,7 @@ public:
 
 private:
 	virtual void		drawCurrent() const;
-	virtual void updateCurrent(); 
+	virtual void		updateCurrent(); 
 	virtual void		buildCurrent();
 
 
