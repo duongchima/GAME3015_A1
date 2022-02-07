@@ -14,5 +14,6 @@ public:
 
 public:
 	XMFLOAT3		mVelocity;
+	XMFLOAT3		mPosition;
 };
 

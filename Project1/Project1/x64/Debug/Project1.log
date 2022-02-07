@@ -1,2 +1,5 @@
-﻿  World.cpp
+﻿  Aircraft.cpp
+D:\Github\GAME3015_A1\Project1\Project1\Aircraft.cpp(35,54): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
+  Entity.cpp
+  Generating Code...
   Project1.vcxproj -> D:\Github\GAME3015_A1\Project1\x64\Debug\Project1.exe

@@ -24,6 +24,8 @@ void World::update(const GameTimer& gt)
 		mPlayerAircraft->setVelocity(velocity);
 		mEnemy->setVelocity(velocity);
 	}
+
+	mPlayerAircraft->update(gt);
 }
 
 void World::draw()

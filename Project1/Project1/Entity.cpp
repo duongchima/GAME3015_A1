@@ -23,5 +23,9 @@ XMFLOAT3 Entity::getVelocity() const
 
 void Entity::updateCurrent(const GameTimer& gt) 
 {
+	mPosition.x = mVelocity.x * gt.DeltaTime();
+	mPosition.y = mVelocity.y * gt.DeltaTime();
+	mPosition.z = mVelocity.z * gt.DeltaTime();
 
+	move(mPosition.x, mPosition.y, mPosition.z);
 }
