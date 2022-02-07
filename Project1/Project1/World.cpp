@@ -5,7 +5,6 @@ World::World(Game* game)
 	, mGame(game)
 	, mPlayerAircraft(nullptr)
 	, mBackground(nullptr)
-	, mEnemy(nullptr)
 	, mWorldBounds(-1.5f, 1.5f, 200.0f, 0.0f)
 	, mSpawnPosition(0.f, 0.f)
 	, mScrollSpeed(1.0f)
@@ -16,16 +15,19 @@ void World::update(const GameTimer& gt)
 {
 	mSceneGraph->update(gt);
 
-	XMFLOAT3 position = mPlayerAircraft->getWorldPosition();
+	XMFLOAT3 LeftEnemyPos = mEnemy[0]->getWorldPosition();
+	XMFLOAT3 RightEnemyPos = mEnemy[1]->getWorldPosition();
 	XMFLOAT3 velocity = mPlayerAircraft->getVelocity();
-	if (position.x < mWorldBounds.x || position.x > mWorldBounds.y)
+
+	if (LeftEnemyPos.x < mWorldBounds.x || RightEnemyPos.x > mWorldBounds.y)
 	{
 		velocity.x = -velocity.x;
 		mPlayerAircraft->setVelocity(velocity);
-		mEnemy->setVelocity(velocity);
+		for (int i = 0; i < 2; i++)
+		{
+			mEnemy[i]->setVelocity(velocity);
+		}
 	}
-
-	mPlayerAircraft->update(gt);
 }
 
 void World::draw()
@@ -161,22 +163,18 @@ void World::buildScene()
 	mPlayerAircraft = player.get();
 	mPlayerAircraft->setPosition(0, 1, 0);
 	mPlayerAircraft->setScale(0.5, 0.5, 0.5);
-	mPlayerAircraft->setVelocity(0.0f, 0.0f, 0.0f);
+	mPlayerAircraft->setVelocity(0.5f, 0.0f, 0.0f);
 	mSceneGraph->attachChild(std::move(player));
 
-	std::unique_ptr<Aircraft> enemy1(new Aircraft(Aircraft::Raptor, Aircraft::Enemy, mGame));
-	mEnemy = enemy1.get();
-	mEnemy->setPosition(-0.5, 1, -0.25);
-	mEnemy->setScale(0.5, 0.5, 0.5);
-	mEnemy->setVelocity(0.0f, 0.0f, 0.0f);
-	mSceneGraph->attachChild(std::move(enemy1));
-
-	std::unique_ptr<Aircraft> enemy2(new Aircraft(Aircraft::Raptor, Aircraft::Enemy, mGame));
-	mEnemy = enemy2.get();
-	mEnemy->setPosition(0.5, 1, -0.25);
-	mEnemy->setScale(0.5, 0.5, 0.5);
-	mEnemy->setVelocity(0.0f, 0.0f, 0.0f);
-	mSceneGraph->attachChild(std::move(enemy2));
+	for (int i = 0; i < 2; i++)
+	{
+		std::unique_ptr<Aircraft> enemy1 (new Aircraft(Aircraft::Raptor, Aircraft::Enemy, mGame));
+		mEnemy[i] = enemy1.get();
+		mEnemy[i]->setPosition(mPlayerAircraft->getWorldPosition().x + (i - 0.5f), mPlayerAircraft->getWorldPosition().y, mPlayerAircraft->getWorldPosition().z - 0.25f);
+		mEnemy[i]->setScale(0.5, 0.5, 0.5);
+		mEnemy[i]->setVelocity(0.5f, 0.0f, 0.0f);
+		mSceneGraph->attachChild(std::move(enemy1));
+	}
 
 	std::unique_ptr<SpriteNode> backgroundSprite(new SpriteNode(mGame));
 	mBackground = backgroundSprite.get();

@@ -53,5 +53,5 @@ private:
 	float mScrollSpeed;
 	Aircraft* mPlayerAircraft;
 	SpriteNode* mBackground;
-	Aircraft* mEnemy;
+	Aircraft* mEnemy[];
 };
