@@ -1,8 +1,8 @@
 #include "Aircraft.hpp"
 #include "Game.hpp"
 
-Aircraft::Aircraft(Type type, Game* game) : Entity(game)
-	, mType(type)
+Aircraft::Aircraft(Type type, AircraftType aircraftType, Game* game) : Entity(game)
+	, mType(type), mAircraftType(aircraftType)
 {
 	switch (type)
 	{

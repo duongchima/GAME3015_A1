@@ -157,21 +157,21 @@ void World::buildShapeGeometry(Microsoft::WRL::ComPtr<ID3D12Device>& GameDevice,
 
 void World::buildScene()
 {
-	std::unique_ptr<Aircraft> player(new Aircraft(Aircraft::Eagle, mGame));
+	std::unique_ptr<Aircraft> player(new Aircraft(Aircraft::Eagle, Aircraft::Player, mGame));
 	mPlayerAircraft = player.get();
 	mPlayerAircraft->setPosition(0, 1, 0);
 	mPlayerAircraft->setScale(0.5, 0.5, 0.5);
 	mPlayerAircraft->setVelocity(0.0f, 0.0f, 0.0f);
 	mSceneGraph->attachChild(std::move(player));
 
-	std::unique_ptr<Aircraft> enemy1(new Aircraft(Aircraft::Raptor, mGame));
+	std::unique_ptr<Aircraft> enemy1(new Aircraft(Aircraft::Raptor, Aircraft::Enemy, mGame));
 	mEnemy = enemy1.get();
 	mEnemy->setPosition(-0.5, 1, -0.25);
 	mEnemy->setScale(0.5, 0.5, 0.5);
 	mEnemy->setVelocity(0.0f, 0.0f, 0.0f);
 	mSceneGraph->attachChild(std::move(enemy1));
 
-	std::unique_ptr<Aircraft> enemy2(new Aircraft(Aircraft::Raptor, mGame));
+	std::unique_ptr<Aircraft> enemy2(new Aircraft(Aircraft::Raptor, Aircraft::Enemy, mGame));
 	mEnemy = enemy2.get();
 	mEnemy->setPosition(0.5, 1, -0.25);
 	mEnemy->setScale(0.5, 0.5, 0.5);
