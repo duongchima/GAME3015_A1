@@ -1,0 +1,62 @@
+\hypertarget{_world_8hpp_source}{}\doxysection{World.\+hpp}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#include "{}SceneNode.hpp"{}}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include "{}Aircraft.hpp"{}}}
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include "{}SpriteNode.h"{}}}
+\DoxyCodeLine{5 }
+\DoxyCodeLine{6 \textcolor{keyword}{class }\mbox{\hyperlink{class_world}{World}} }
+\DoxyCodeLine{7 \{}
+\DoxyCodeLine{8 \textcolor{keyword}{public}:}
+\DoxyCodeLine{9     \textcolor{keyword}{explicit} \mbox{\hyperlink{class_world}{World}}(\mbox{\hyperlink{class_game}{Game}}* window);}
+\DoxyCodeLine{10     \textcolor{keywordtype}{void} update(\textcolor{keyword}{const} GameTimer\& gt);}
+\DoxyCodeLine{11     \textcolor{keywordtype}{void} draw();}
+\DoxyCodeLine{12 }
+\DoxyCodeLine{13     \textcolor{keywordtype}{void} loadTextures(Microsoft::WRL::ComPtr<ID3D12Device>\& GameDevice, }
+\DoxyCodeLine{14                       Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>\& GameCommandList,}
+\DoxyCodeLine{15                       std::unordered\_map<std::string, std::unique\_ptr<Texture>>\& GameTextures);}
+\DoxyCodeLine{16     }
+\DoxyCodeLine{17     \textcolor{keywordtype}{void} loadMaterials(std::unordered\_map<std::string, std::unique\_ptr<Material>>\& GameMaterials);}
+\DoxyCodeLine{18     \textcolor{keywordtype}{void} buildShapeGeometry(Microsoft::WRL::ComPtr<ID3D12Device>\& GameDevice,}
+\DoxyCodeLine{19                             Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>\& GameCommandList,}
+\DoxyCodeLine{20                             std::unordered\_map<std::string, std::unique\_ptr<MeshGeometry>>\& GameGeometries);}
+\DoxyCodeLine{21     }
+\DoxyCodeLine{22     \textcolor{comment}{/*void buildDescriptorHeaps(Microsoft::WRL::ComPtr<ID3D12Device>\& GameDevice, }}
+\DoxyCodeLine{23 \textcolor{comment}{                              std::unordered\_map<std::string, std::unique\_ptr<Texture>>\& GameTextures,}}
+\DoxyCodeLine{24 \textcolor{comment}{                              ComPtr<ID3D12DescriptorHeap> GameSrvDescriptorHeap,}}
+\DoxyCodeLine{25 \textcolor{comment}{                              UINT GameCbvSrvDescriptorSize}}
+\DoxyCodeLine{26 \textcolor{comment}{                             );*/}}
+\DoxyCodeLine{27     }
+\DoxyCodeLine{28     \textcolor{keywordtype}{void} buildScene();}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{30     Camera* GetCamera() \{ \textcolor{keywordflow}{return} \&\_Camera; \}}
+\DoxyCodeLine{31 }
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33 \textcolor{keyword}{private}:}
+\DoxyCodeLine{34     \textcolor{keyword}{enum} Layer}
+\DoxyCodeLine{35     \{}
+\DoxyCodeLine{36         Background,}
+\DoxyCodeLine{37         Air,}
+\DoxyCodeLine{38         LayerCount}
+\DoxyCodeLine{39     \};}
+\DoxyCodeLine{40 }
+\DoxyCodeLine{41 }
+\DoxyCodeLine{42 \textcolor{keyword}{private}:}
+\DoxyCodeLine{43     \textcolor{comment}{// Reference to the Game Backend}}
+\DoxyCodeLine{44     \mbox{\hyperlink{class_game}{Game}}* mGame;}
+\DoxyCodeLine{45     \textcolor{comment}{// World Holds the Camera}}
+\DoxyCodeLine{46     Camera \_Camera;}
+\DoxyCodeLine{47 }
+\DoxyCodeLine{48     \mbox{\hyperlink{class_scene_node}{SceneNode}}* mSceneGraph;}
+\DoxyCodeLine{49     std::array<SceneNode*, LayerCount> mSceneLayers;}
+\DoxyCodeLine{50 }
+\DoxyCodeLine{51     XMFLOAT4 mWorldBounds;}
+\DoxyCodeLine{52     XMFLOAT2 mSpawnPosition;}
+\DoxyCodeLine{53     \textcolor{keywordtype}{float} mScrollSpeed;}
+\DoxyCodeLine{54     \mbox{\hyperlink{class_aircraft}{Aircraft}}* mPlayerAircraft;}
+\DoxyCodeLine{55     \mbox{\hyperlink{class_sprite_node}{SpriteNode}}* mBackground;}
+\DoxyCodeLine{56     \mbox{\hyperlink{class_aircraft}{Aircraft}}* mEnemy[];}
+\DoxyCodeLine{57 \};}
+
+\end{DoxyCode}

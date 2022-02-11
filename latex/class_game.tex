@@ -1,0 +1,47 @@
+\hypertarget{class_game}{}\doxysection{Game Class Reference}
+\label{class_game}\index{Game@{Game}}
+Inheritance diagram for Game\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_game}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_game_a3f68a62a1fe1ca8dcd1deb054b384cef}\label{class_game_a3f68a62a1fe1ca8dcd1deb054b384cef}} 
+{\bfseries Game} (HINSTANCE h\+Instance)
+\item 
+\mbox{\Hypertarget{class_game_a293c79673d4c15f55f1ab7f3d1809ddb}\label{class_game_a293c79673d4c15f55f1ab7f3d1809ddb}} 
+{\bfseries Game} (const \mbox{\hyperlink{class_game}{Game}} \&rhs)=delete
+\item 
+\mbox{\Hypertarget{class_game_a9bda5763ea460634fef947be2530c8f5}\label{class_game_a9bda5763ea460634fef947be2530c8f5}} 
+\mbox{\hyperlink{class_game}{Game}} \& {\bfseries operator=} (const \mbox{\hyperlink{class_game}{Game}} \&rhs)=delete
+\item 
+\mbox{\Hypertarget{class_game_a16354d232327f6c21319713bf6983674}\label{class_game_a16354d232327f6c21319713bf6983674}} 
+virtual bool {\bfseries Initialize} () override
+\item 
+\mbox{\Hypertarget{class_game_aab13f3fdd19f7fec4d64922e36cf3088}\label{class_game_aab13f3fdd19f7fec4d64922e36cf3088}} 
+std\+::vector$<$ std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{struct_render_item}{Render\+Item}} $>$ $>$ \& {\bfseries get\+Render\+Items} ()
+\item 
+\mbox{\Hypertarget{class_game_a2ab854095110829c9fb607b8bf3b50e1}\label{class_game_a2ab854095110829c9fb607b8bf3b50e1}} 
+std\+::unordered\+\_\+map$<$ std\+::string, std\+::unique\+\_\+ptr$<$ Material $>$ $>$ \& {\bfseries get\+Materials} ()
+\item 
+\mbox{\Hypertarget{class_game_a28156d8ae0425c8c80fd80c34c9ae92b}\label{class_game_a28156d8ae0425c8c80fd80c34c9ae92b}} 
+std\+::unordered\+\_\+map$<$ std\+::string, std\+::unique\+\_\+ptr$<$ Texture $>$ $>$ \& {\bfseries Get\+Textures} ()
+\item 
+\mbox{\Hypertarget{class_game_a8fecc6dedc120a94d9940ad5d7518242}\label{class_game_a8fecc6dedc120a94d9940ad5d7518242}} 
+std\+::unordered\+\_\+map$<$ std\+::string, std\+::unique\+\_\+ptr$<$ Mesh\+Geometry $>$ $>$ \& {\bfseries get\+Geometries} ()
+\item 
+\mbox{\Hypertarget{class_game_a59a846b7d627c404eddf6bdf834011ca}\label{class_game_a59a846b7d627c404eddf6bdf834011ca}} 
+Microsoft\+::\+WRL\+::\+Com\+Ptr$<$ ID3\+D12\+Device $>$ \& {\bfseries Get\+Device} ()
+\item 
+\mbox{\Hypertarget{class_game_a600097148b87a3e94ae6e85ab2831e5a}\label{class_game_a600097148b87a3e94ae6e85ab2831e5a}} 
+Microsoft\+::\+WRL\+::\+Com\+Ptr$<$ ID3\+D12\+Graphics\+Command\+List $>$ \& {\bfseries Get\+Command\+List} ()
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Game.\+hpp\item 
+Game.\+cpp\end{DoxyCompactItemize}

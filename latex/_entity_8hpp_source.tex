@@ -1,0 +1,24 @@
+\hypertarget{_entity_8hpp_source}{}\doxysection{Entity.\+hpp}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#include "{}SceneNode.hpp"{}}}
+\DoxyCodeLine{3 }
+\DoxyCodeLine{4 \textcolor{keyword}{class }\mbox{\hyperlink{class_entity}{Entity}} :}
+\DoxyCodeLine{5     \textcolor{keyword}{public} \mbox{\hyperlink{class_scene_node}{SceneNode}}}
+\DoxyCodeLine{6 \{}
+\DoxyCodeLine{7 \textcolor{keyword}{public}:}
+\DoxyCodeLine{8     \mbox{\hyperlink{class_entity}{Entity}}(\mbox{\hyperlink{class_game}{Game}}* game);}
+\DoxyCodeLine{9     \textcolor{keywordtype}{void}                setVelocity(XMFLOAT3 velocity);}
+\DoxyCodeLine{10     \textcolor{keywordtype}{void}                setVelocity(\textcolor{keywordtype}{float} vx, \textcolor{keywordtype}{float} vy, \textcolor{keywordtype}{float} vz);}
+\DoxyCodeLine{11     XMFLOAT3            getVelocity() \textcolor{keyword}{const};}
+\DoxyCodeLine{12 }
+\DoxyCodeLine{13     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void}        updateCurrent(\textcolor{keyword}{const} GameTimer\& gt);}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{keyword}{public}:}
+\DoxyCodeLine{16     XMFLOAT3        mVelocity;}
+\DoxyCodeLine{17     XMFLOAT3        mPosition;}
+\DoxyCodeLine{18 \};}
+\DoxyCodeLine{19 }
+
+\end{DoxyCode}
