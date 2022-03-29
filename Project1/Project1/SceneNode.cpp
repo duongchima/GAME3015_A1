@@ -1,4 +1,5 @@
 #include "SceneNode.hpp"
+#include "Command.h"
 #include "Game.hpp"
 
 SceneNode::SceneNode(Game* game)
@@ -146,4 +147,18 @@ void SceneNode::move(float x, float y, float z)
 	mWorldPosition.x += x;
 	mWorldPosition.y += y;
 	mWorldPosition.z += z;
+}
+void SceneNode::onCommand(const Command& command, const GameTimer& gt)
+{
+	if (command.category & getCategory())
+		command.action(*this, gt);
+
+	// Command children
+	for (Ptr& child : mChildren)
+		child->onCommand(command, gt);
+}
+
+unsigned int SceneNode::getCategory() const
+{
+	return Category::Scene;
 }

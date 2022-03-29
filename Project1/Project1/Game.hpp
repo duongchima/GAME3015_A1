@@ -1,5 +1,5 @@
 #include "World.hpp"
-
+#include "Player.h"
 class Game : public D3DApp
 {
 public:
@@ -18,6 +18,7 @@ private:
 	virtual void OnMouseUp(WPARAM btnState, int x, int y)override;
 	virtual void OnMouseMove(WPARAM btnState, int x, int y)override;
 
+	void ProcessInput();
 	void OnKeyboardInput(const GameTimer& gt);
 	void UpdateCamera(const GameTimer& gt);
 	void AnimateMaterials(const GameTimer& gt);
@@ -79,7 +80,7 @@ private:
 	float mTheta = 1.5f * XM_PI;
 	float mPhi = 0.2f * XM_PI;
 	float mRadius = 15.0f;
-
+	Player mPlayer;
 	World _World;
 
 public:

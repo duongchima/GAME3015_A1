@@ -37,7 +37,7 @@ bool Game::Initialize()
 	BuildRenderItems();
 	BuildFrameResources();
 	BuildPSOs();
-
+	mPlayer = Player();
 	// Execute the initialization commands.
 	ThrowIfFailed(mCommandList->Close());
 	ID3D12CommandList* cmdsLists[] = { mCommandList.Get() };
@@ -62,6 +62,7 @@ void Game::OnResize()
 
 void Game::Update(const GameTimer& gt)
 {
+	ProcessInput();
 	OnKeyboardInput(gt);
 	_World.update(gt);
 	UpdateCamera(gt);
@@ -190,6 +191,13 @@ void Game::OnMouseMove(WPARAM btnState, int x, int y)
 
 	mLastMousePos.x = x;
 	mLastMousePos.y = y;
+}
+
+void Game::ProcessInput()
+{
+	CommandQueue& commands = _World.getCommandQueue();
+	mPlayer.handleEvent(commands);
+	mPlayer.handleRealtimeInput(commands);
 }
 
 void Game::OnKeyboardInput(const GameTimer& gt)

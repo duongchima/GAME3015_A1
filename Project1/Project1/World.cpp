@@ -13,6 +13,10 @@ World::World(Game* game)
 
 void World::update(const GameTimer& gt)
 {
+
+	while (!mCommandQueue.isEmpty())
+		mSceneGraph->onCommand(mCommandQueue.pop(), gt);
+
 	mSceneGraph->update(gt);
 
 	XMFLOAT3 LeftEnemyPos = mEnemy[0]->getWorldPosition();
@@ -42,6 +46,11 @@ void World::update(const GameTimer& gt)
 void World::draw()
 {
 	mSceneGraph->draw();
+}
+
+CommandQueue& World::getCommandQueue()
+{
+	return mCommandQueue;
 }
 
 void World::loadTextures(
