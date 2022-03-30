@@ -14,7 +14,13 @@ public:
 	enum Action
 	{
 		Rotate,
-		Shoot
+		Shoot,
+
+		MoveLeft,
+		MoveRight,
+		MoveUp,
+		MoveDown,
+		ActionCount
 	};
 
 	void					assignKey(Action action, char key);

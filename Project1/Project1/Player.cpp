@@ -10,10 +10,27 @@
 
 using namespace DirectX;
 
+struct AircraftMover
+{
+	AircraftMover(float vx, float vy, float vz)
+		: velocity(vx, vy, vz)
+	{
+	}
+
+	void operator() (Aircraft& aircraft, const GameTimer&) const
+	{
+		aircraft.accelerate(velocity);
+	}
+
+	XMFLOAT3 velocity;
+};
+
 Player::Player()
 {
-	mKeyBinding[VK_LBUTTON] = Rotate;
-	mKeyBinding[VK_RBUTTON] = Shoot;
+	mKeyBinding[VK_LBUTTON] = MoveLeft;
+	mKeyBinding[VK_RBUTTON] = MoveRight;
+	mKeyBinding[VK_UP] = MoveUp;
+	mKeyBinding[VK_DOWN] = MoveDown;
 
 	initializeActions();
 
@@ -80,20 +97,24 @@ char Player::getAssignedKey(Action action) const
 void Player::initializeActions()
 {
 	// initialize actions here
-	//const float playerSpeed = 20.f;
+	const float playerSpeed = 10.f;
 
-	//mActionBinding[MoveLeft].action = derivedAction<Aircraft>(AircraftMover(-playerSpeed, 0.f, 0.0f));
-	//mActionBinding[MoveRight].action = derivedAction<Aircraft>(AircraftMover(+playerSpeed, 0.f, 0.0f));
-	//mActionBinding[MoveUp].action = derivedAction<Aircraft>(AircraftMover(0.f, 0.0f, +playerSpeed));
-	//mActionBinding[MoveDown].action = derivedAction<Aircraft>(AircraftMover(0.f, 0.0f, -playerSpeed));
+	mActionBinding[MoveLeft].action = derivedAction<Aircraft>(AircraftMover(-playerSpeed, 0.f, 0.0f));
+	mActionBinding[MoveRight].action = derivedAction<Aircraft>(AircraftMover(+playerSpeed, 0.f, 0.0f));
+	mActionBinding[MoveUp].action = derivedAction<Aircraft>(AircraftMover(0.f, 0.0f, +playerSpeed));
+	mActionBinding[MoveDown].action = derivedAction<Aircraft>(AircraftMover(0.f, 0.0f, -playerSpeed));
 }
 
 bool Player::isRealtimeAction(Action action)
 {
-	switch (action) {
-	case Rotate:
-	case Shoot:
+	switch (action)
+	{
+	case MoveLeft:
+	case MoveRight:
+	case MoveDown:
+	case MoveUp:
 		return true;
+
 	default:
 		return false;
 	}

@@ -1,20 +1,32 @@
 #include "Aircraft.hpp"
 #include "Game.hpp"
 
-Aircraft::Aircraft(Type type, AircraftType aircraftType, Game* game) : Entity(game)
-	, mType(type), mAircraftType(aircraftType)
+Aircraft::Aircraft(Type type, Game* game) : Entity(game)
+, mType(type)
 {
 	switch (type)
 	{
-	case (Eagle):
+	case (Type::Eagle):
 		mSprite = "Eagle";
 		break;
-	case (Raptor):
+	case (Type::Raptor):
 		mSprite = "Raptor";
 		break;
 	default:
 		mSprite = "Eagle";
 		break;
+	}
+}
+
+unsigned int Aircraft::getCategory() const
+{
+	switch (mType)
+	{
+	case Type::Eagle:
+		return Category::PlayerAircraft;
+
+	default:
+		return Category::EnemyAircraft;
 	}
 }
 

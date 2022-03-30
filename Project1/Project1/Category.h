@@ -1,7 +1,5 @@
 #pragma once
-//We divide our game objects into categories. Each category is a group of one or multiple game objects
-//Each category receives similar command
-// Entity/scene node category, used to dispatch commands
+
 namespace Category
 {
 	enum Type

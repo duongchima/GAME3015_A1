@@ -11,17 +11,11 @@ public:
 		Eagle,
 		Raptor,
 	};
-	enum AircraftType
-	{
-		Player,
-		Enemy,
-		Total_Num_Types
-	};
 
 
 public:
-	Aircraft(Type type, AircraftType aircraftType, Game* game);
-
+	Aircraft(Type type, Game* game);
+	virtual unsigned int getCategory() const;
 
 private:
 	virtual void		drawCurrent() const;
@@ -31,6 +25,5 @@ private:
 
 private:
 	Type				mType;
-	AircraftType		mAircraftType;
 	std::string			mSprite;
 };

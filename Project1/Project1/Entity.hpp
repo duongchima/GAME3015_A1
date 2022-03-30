@@ -10,6 +10,8 @@ public:
 	void				setVelocity(float vx, float vy, float vz);
 	XMFLOAT3			getVelocity() const;
 
+	void				accelerate(XMFLOAT3 velocity);
+
 	virtual	void		updateCurrent(const GameTimer& gt);
 
 public:

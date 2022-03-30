@@ -13,34 +13,34 @@ World::World(Game* game)
 
 void World::update(const GameTimer& gt)
 {
-
+	mPlayerAircraft->setVelocity(0, 0, 0);
 	while (!mCommandQueue.isEmpty())
 		mSceneGraph->onCommand(mCommandQueue.pop(), gt);
 
 	mSceneGraph->update(gt);
 
-	XMFLOAT3 LeftEnemyPos = mEnemy[0]->getWorldPosition();
-	XMFLOAT3 RightEnemyPos = mEnemy[1]->getWorldPosition();
-	XMFLOAT3 velocity = mPlayerAircraft->getVelocity();
+	//XMFLOAT3 LeftEnemyPos = mEnemy[0]->getWorldPosition();
+	//XMFLOAT3 RightEnemyPos = mEnemy[1]->getWorldPosition();
+	//XMFLOAT3 velocity = mPlayerAircraft->getVelocity();
 
-	if (LeftEnemyPos.x < mWorldBounds.x || RightEnemyPos.x > mWorldBounds.y)
-	{
-		velocity.x = -velocity.x;
-		mPlayerAircraft->setVelocity(velocity);
-		for (int i = 0; i < 2; i++)
-		{
-			mEnemy[i]->setVelocity(velocity);
-		}
-	}
-	if (LeftEnemyPos.y > 5.0f || LeftEnemyPos.y < 0.0f)
-	{
-		velocity.y = -velocity.y;
-		mPlayerAircraft->setVelocity(velocity);
-		for (int i = 0; i < 2; i++)
-		{
-			mEnemy[i]->setVelocity(velocity);
-		}
-	}
+	//if (LeftEnemyPos.x < mWorldBounds.x || RightEnemyPos.x > mWorldBounds.y)
+	//{
+	//	velocity.x = -velocity.x;
+	//	mPlayerAircraft->setVelocity(velocity);
+	//	for (int i = 0; i < 2; i++)
+	//	{
+	//		mEnemy[i]->setVelocity(velocity);
+	//	}
+	//}
+	//if (LeftEnemyPos.y > 5.0f || LeftEnemyPos.y < 0.0f)
+	//{
+	//	velocity.y = -velocity.y;
+	//	mPlayerAircraft->setVelocity(velocity);
+	//	for (int i = 0; i < 2; i++)
+	//	{
+	//		mEnemy[i]->setVelocity(velocity);
+	//	}
+	//}
 }
 
 void World::draw()
@@ -177,7 +177,7 @@ void World::buildShapeGeometry(Microsoft::WRL::ComPtr<ID3D12Device>& GameDevice,
 
 void World::buildScene()
 {
-	std::unique_ptr<Aircraft> player(new Aircraft(Aircraft::Eagle, Aircraft::Player, mGame));
+	std::unique_ptr<Aircraft> player(new Aircraft(Aircraft::Eagle, mGame));
 	mPlayerAircraft = player.get();
 	mPlayerAircraft->setPosition(0, 1, 0);
 	mPlayerAircraft->setScale(3.0, 3.0, 3.0);
@@ -186,7 +186,7 @@ void World::buildScene()
 
 	for (int i = 0; i < 2; i++)
 	{
-		std::unique_ptr<Aircraft> enemy1 (new Aircraft(Aircraft::Raptor, Aircraft::Enemy, mGame));
+		std::unique_ptr<Aircraft> enemy1 (new Aircraft(Aircraft::Raptor, mGame));
 		mEnemy[i] = enemy1.get();
 		mEnemy[i]->setPosition(mPlayerAircraft->getWorldPosition().x + (i * 5.5f - 2.5f), mPlayerAircraft->getWorldPosition().y, mPlayerAircraft->getWorldPosition().z + 5.25f);
 		mEnemy[i]->setScale(3.0, 3.0, 3.0);

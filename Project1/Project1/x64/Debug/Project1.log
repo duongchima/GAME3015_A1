@@ -1,4 +1,10 @@
-﻿  World.cpp
-D:\School\Game Engine Developments II\Assignments\DirectX\Project1\Project1\World.hpp(56,12): warning C4200: nonstandard extension used: zero-sized array in struct/union
-D:\School\Game Engine Developments II\Assignments\DirectX\Project1\Project1\World.hpp(56,12): message : This member will be ignored by a defaulted constructor or copy/move assignment operator
-  Project1.vcxproj -> D:\School\Game Engine Developments II\Assignments\DirectX\Project1\x64\Debug\Project1.exe
+﻿  Entity.cpp
+  Game.cpp
+D:\Github\GAME3015_A1\Project1\Project1\World.hpp(58,12): warning C4200: nonstandard extension used: zero-sized array in struct/union
+D:\Github\GAME3015_A1\Project1\Project1\World.hpp(58,12): message : This member will be ignored by a defaulted constructor or copy/move assignment operator
+D:\Github\GAME3015_A1\Project1\Project1\Game.cpp(24,36): warning C4305: 'argument': truncation from 'double' to 'float'
+  main.cpp
+D:\Github\GAME3015_A1\Project1\Project1\World.hpp(58,12): warning C4200: nonstandard extension used: zero-sized array in struct/union
+D:\Github\GAME3015_A1\Project1\Project1\World.hpp(58,12): message : This member will be ignored by a defaulted constructor or copy/move assignment operator
+  Generating Code...
+  Project1.vcxproj -> D:\Github\GAME3015_A1\Project1\x64\Debug\Project1.exe
