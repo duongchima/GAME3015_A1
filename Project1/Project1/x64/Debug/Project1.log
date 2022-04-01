@@ -1,28 +1,3 @@
-﻿  Camera.cpp
-  d3dApp.cpp
-  d3dUtil.cpp
-  DDSTextureLoader.cpp
-  GameTimer.cpp
-  GeometryGenerator.cpp
-  MathHelper.cpp
-  Aircraft.cpp
-D:\Github\GAME3015_A1\Project1\Project1\Aircraft.cpp(49,54): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
-  Command.cpp
-  CommandQueue.cpp
-  Entity.cpp
-  FrameResource.cpp
-  Game.cpp
-D:\Github\GAME3015_A1\Project1\Project1\Game.cpp(24,36): warning C4305: 'argument': truncation from 'double' to 'float'
-  main.cpp
-  Player.cpp
-D:\Github\GAME3015_A1\Project1\Project1\Player.cpp(33,23): warning C4244: 'argument': conversion from 'SHORT' to 'char', possible loss of data
-D:\Github\GAME3015_A1\Project1\Project1\Player.cpp(34,23): warning C4244: 'argument': conversion from 'SHORT' to 'char', possible loss of data
-D:\Github\GAME3015_A1\Project1\Project1\Player.cpp(35,23): warning C4244: 'argument': conversion from 'SHORT' to 'char', possible loss of data
-D:\Github\GAME3015_A1\Project1\Project1\Player.cpp(36,23): warning C4244: 'argument': conversion from 'SHORT' to 'char', possible loss of data
-  SceneNode.cpp
-  SpriteNode.cpp
-D:\Github\GAME3015_A1\Project1\Project1\SpriteNode.cpp(20,54): warning C4267: '=': conversion from 'size_t' to 'UINT', possible loss of data
-  World.cpp
-D:\Github\GAME3015_A1\Project1\Project1\World.cpp(205,82): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  Generating Code...
+﻿  World.cpp
+D:\Github\GAME3015_A1\Project1\Project1\World.cpp(220,82): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   Project1.vcxproj -> D:\Github\GAME3015_A1\Project1\x64\Debug\Project1.exe
