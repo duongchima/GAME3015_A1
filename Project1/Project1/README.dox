@@ -1,0 +1,16 @@
+/**
+*@mainpage GAME3015-A2
+*@author Chloe Ma, Serena Lee
+*@brief Aircraft shooter using DirectX 12 (C++).
+*Classes:
+*1 - Aircraft
+*2 - Command
+*3 - CommandQueue
+*4 - Entity
+*5 - Game
+*6 - Player
+*7 - SceneNode
+*8 - SpriteNode
+*9 - World
+* @attention Player movement with WASD/arrow keys or LMB and RMB. Dragging LMB will move the camera. 
+*/
