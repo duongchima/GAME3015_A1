@@ -1,4 +1,29 @@
-float4 main( float3 pos : POSITION ) : SV_POSITION   // special semantic: System Value Position
+cbuffer cbPerObject : register(b0)
 {
-		return float4(pos.x, pos.y, pos.z, 1.0f);
+	float4x4 gWorldViewProj;
+};
+
+struct VertexIn
+{
+	float3 PosL  : POSITION;
+	float4 Color : COLOR;
+};
+
+struct VertexOut
+{
+	float4 PosH  : SV_POSITION;
+	float4 Color : COLOR;
+};
+
+VertexOut VS(VertexIn vin)
+{
+	VertexOut vout;
+
+	// Transform to homogeneous clip space.
+	vout.PosH = mul(float4(vin.PosL, 1.0f), gWorldViewProj);
+
+	// Just pass vertex color into the pixel shader.
+	vout.Color = vin.Color;
+
+	return vout;
 }

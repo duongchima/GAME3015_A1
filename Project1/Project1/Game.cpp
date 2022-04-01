@@ -1,10 +1,17 @@
 #include "Game.hpp"
+#include "GameState.hpp"
+#include "TitleState.hpp"
+#include "MenuState.h"
+#include "PauseState.h"
+#include "StateIdentifiers.hpp"
 
 const int gNumFrameResources = 3;
 
 Game::Game(HINSTANCE hInstance)
 	: D3DApp(hInstance)
-	, _World(this)
+	//, mWorld(this)
+	, mPlayer()
+	, mStateStack(State::Context(this, &mPlayer))
 {
 }
 
@@ -20,24 +27,28 @@ bool Game::Initialize()
 		return false;
 
 
-	_World.GetCamera()->SetPosition(0, 100, 0);
-	_World.GetCamera()->Pitch(3.14 / 2);
+	mMainWndCaption = L"Assignment Solution";
 
+	mCamera.SetPosition(0.0f, 50.0f, 0.0f);
+	mCamera.Pitch(3.14f / 2.0f);
+
+	// Reset the command list to prep for initialization commands.
 	ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
 
+	// Get the increment size of a descriptor in this heap type.  This is hardware specific, 
+	// so we have to query this information.
 	mCbvSrvDescriptorSize = md3dDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-	LoadWorldTextures();
-	BuildWorldMaterials();
-	BuildWorldShapeGeometry();
-
+	LoadTextures();
 	BuildRootSignature();
 	BuildDescriptorHeaps();
 	BuildShadersAndInputLayout();
-	BuildRenderItems();
-	BuildFrameResources();
+	BuildShapeGeometry();
+	BuildMaterials();
+	RegisterStates();
+	mStateStack.pushState(States::Title);
 	BuildPSOs();
-	mPlayer = Player();
+
 	// Execute the initialization commands.
 	ThrowIfFailed(mCommandList->Close());
 	ID3D12CommandList* cmdsLists[] = { mCommandList.Get() };
@@ -54,17 +65,27 @@ void Game::OnResize()
 	D3DApp::OnResize();
 
 	// The window resized, so update the aspect ratio and recompute the projection matrix.
-	XMMATRIX P = XMMatrixPerspectiveFovLH(0.25f * MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
-	XMStoreFloat4x4(&mProj, P);
+	//XMMATRIX P = XMMatrixPerspectiveFovLH(0.25f * MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
+	//XMStoreFloat4x4(&mProj, P);
 
-	/*_World.GetCamera()->SetLens(0.25f * MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);*/
+	mCamera.SetLens(0.25f * MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
 }
 
 void Game::Update(const GameTimer& gt)
 {
-	ProcessInput();
-	OnKeyboardInput(gt);
-	_World.update(gt);
+	//OnKeyboardInput(gt);
+	//ProcessInput();
+	mStateStack.update(gt);
+	mStateStack.handleRealtimeInput();
+
+	if (mStateStack.isEmpty())
+	{
+		PostQuitMessage(0);
+		return;
+	}
+
+
+
 	UpdateCamera(gt);
 
 	// Cycle through the circular frame resource array.
@@ -81,7 +102,7 @@ void Game::Update(const GameTimer& gt)
 		CloseHandle(eventHandle);
 	}
 
-	AnimateMaterials(gt);
+	//AnimateMaterials(gt);
 	UpdateObjectCBs(gt);
 	UpdateMaterialCBs(gt);
 	UpdateMainPassCB(gt);
@@ -121,8 +142,8 @@ void Game::Draw(const GameTimer& gt)
 	auto passCB = mCurrFrameResource->PassCB->Resource();
 	mCommandList->SetGraphicsRootConstantBufferView(2, passCB->GetGPUVirtualAddress());
 
-	_World.draw();
-	DrawRenderItems(mCommandList.Get(), mOpaqueRitems);
+	mStateStack.draw();
+	//DrawRenderItems(mCommandList.Get(), mOpaqueRitems);
 
 	// Indicate a state transition on the resource usage.
 	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
@@ -169,12 +190,8 @@ void Game::OnMouseMove(WPARAM btnState, int x, int y)
 	//	float dx = XMConvertToRadians(0.25f * static_cast<float>(x - mLastMousePos.x));
 	//	float dy = XMConvertToRadians(0.25f * static_cast<float>(y - mLastMousePos.y));
 
-	//	// Update angles based on input to orbit camera around box.
-	//	mTheta += dx;
-	//	mPhi += dy;
-
-	//	// Restrict the angle mPhi.
-	//	mPhi = MathHelper::Clamp(mPhi, 0.1f, MathHelper::Pi - 0.1f);
+	//	mCamera.Pitch(dy);
+	//	mCamera.RotateY(dx);
 	//}
 	//else if ((btnState & MK_RBUTTON) != 0)
 	//{
@@ -182,75 +199,41 @@ void Game::OnMouseMove(WPARAM btnState, int x, int y)
 	//	float dx = 0.05f * static_cast<float>(x - mLastMousePos.x);
 	//	float dy = 0.05f * static_cast<float>(y - mLastMousePos.y);
 
+	//	//To Do
 	//	// Update the camera radius based on input.
-	//	mRadius += dx - dy;
+	//	//mRadius += dx - dy;
 
 	//	// Restrict the radius.
-	//	mRadius = MathHelper::Clamp(mRadius, 5.0f, 150.0f);
+	//	//mRadius = MathHelper::Clamp(mRadius, 5.0f, 150.0f);
 	//}
 
 	//mLastMousePos.x = x;
 	//mLastMousePos.y = y;
 }
 
-void Game::ProcessInput()
+void Game::OnKeyDown(WPARAM btnState)
 {
-	CommandQueue& commands = _World.getCommandQueue();
-	mPlayer.handleEvent(commands);
-	mPlayer.handleRealtimeInput(commands);
+	mStateStack.handleEvent(btnState);
 }
 
-void Game::OnKeyboardInput(const GameTimer& gt)
-{
-	const float dt = gt.DeltaTime();
-
-	float tmin = 0;
-	float buffer = 0.5;
-	XMFLOAT3  oppositef3(-1, -1, -1);
-	XMVECTOR opposite = XMLoadFloat3(&oppositef3);
-
-	if (GetAsyncKeyState('W') & 0x8000)
-	{
-		
-	}
-
-	if (GetAsyncKeyState('S') & 0x8000)
-	{
-		
-
-	}
-	if (GetAsyncKeyState('A') & 0x8000)
-	{
-		
-
-
-	}
-	if (GetAsyncKeyState('D') & 0x8000)
-	{
-	}
-
-
-	_World.GetCamera()->UpdateViewMatrix();
-}
 
 void Game::UpdateCamera(const GameTimer& gt)
 {
-
 	// Convert Spherical to Cartesian coordinates.
-	mEyePos.x = mRadius * sinf(mPhi) * cosf(mTheta);
-	mEyePos.z = mRadius * sinf(mPhi) * sinf(mTheta);
-	mEyePos.y = mRadius * cosf(mPhi);
+	//mEyePos.x = mRadius * sinf(mPhi) * cosf(mTheta);
+	//mEyePos.z = mRadius * sinf(mPhi) * sinf(mTheta);
+	//mEyePos.y = mRadius * cosf(mPhi);
 
-	// Build the view matrix.
-	XMVECTOR pos = XMVectorSet(mEyePos.x, mEyePos.y + 10, mEyePos.z - 40, 1.0f);
-	XMVECTOR target = XMVectorZero();
-	XMVECTOR up = XMVectorSet(0.0f, 5.0f, 20.0f, 0.0f);
+	//// Build the view matrix.
+	//XMVECTOR pos = XMVectorSet(mEyePos.x, mEyePos.y, mEyePos.z, 1.0f);
+	//XMVECTOR target = XMVectorZero();
+	//XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
-	XMMATRIX view = XMMatrixLookAtLH(pos, target, up);
-	XMStoreFloat4x4(&mView, view);
+	//XMMATRIX view = XMMatrixLookAtLH(pos, target, up);
+	//XMStoreFloat4x4(&mView, view);
+	mCamera.UpdateViewMatrix();
+
 }
-
-
 
 void Game::AnimateMaterials(const GameTimer& gt)
 {
@@ -259,8 +242,10 @@ void Game::AnimateMaterials(const GameTimer& gt)
 
 void Game::UpdateObjectCBs(const GameTimer& gt)
 {
+	State* currentState = mStateStack.getCurrentState();
+
 	auto currObjectCB = mCurrFrameResource->ObjectCB.get();
-	for (auto& e : mAllRitems)
+	for (auto& e : currentState->getRenderItems())
 	{
 		// Only update the cbuffer data if the constants have changed.  
 		// This needs to be tracked per frame resource.
@@ -309,10 +294,8 @@ void Game::UpdateMaterialCBs(const GameTimer& gt)
 
 void Game::UpdateMainPassCB(const GameTimer& gt)
 {
-	/*XMMATRIX view = _World.GetCamera()->GetView();
-	XMMATRIX proj = _World.GetCamera()->GetProj();*/
-	XMMATRIX view = XMLoadFloat4x4(&mView);
-	XMMATRIX proj = XMLoadFloat4x4(&mProj);
+	XMMATRIX view = mCamera.GetView();
+	XMMATRIX proj = mCamera.GetProj();
 
 	XMMATRIX viewProj = XMMatrixMultiply(view, proj);
 	XMMATRIX invView = XMMatrixInverse(&XMMatrixDeterminant(view), view);
@@ -325,7 +308,7 @@ void Game::UpdateMainPassCB(const GameTimer& gt)
 	XMStoreFloat4x4(&mMainPassCB.InvProj, XMMatrixTranspose(invProj));
 	XMStoreFloat4x4(&mMainPassCB.ViewProj, XMMatrixTranspose(viewProj));
 	XMStoreFloat4x4(&mMainPassCB.InvViewProj, XMMatrixTranspose(invViewProj));
-	mMainPassCB.EyePosW = _World.GetCamera()->GetPosition3f();
+	mMainPassCB.EyePosW = mCamera.GetPosition3f();
 	mMainPassCB.RenderTargetSize = XMFLOAT2((float)mClientWidth, (float)mClientHeight);
 	mMainPassCB.InvRenderTargetSize = XMFLOAT2(1.0f / mClientWidth, 1.0f / mClientHeight);
 	mMainPassCB.NearZ = 1.0f;
@@ -344,9 +327,78 @@ void Game::UpdateMainPassCB(const GameTimer& gt)
 	currPassCB->CopyData(0, mMainPassCB);
 }
 
-void Game::LoadWorldTextures()
+void Game::LoadTextures()
 {
-	_World.loadTextures(GetDevice(), GetCommandList(), GetTextures());
+	//Eagle
+	auto EagleTex = std::make_unique<Texture>();
+	EagleTex->Name = "EagleTex";
+	EagleTex->Filename = L"../../Textures/Eagle.dds";
+	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
+		mCommandList.Get(), EagleTex->Filename.c_str(),
+		EagleTex->Resource, EagleTex->UploadHeap));
+
+	mTextures[EagleTex->Name] = std::move(EagleTex);
+
+	//Raptor
+	auto RaptorTex = std::make_unique<Texture>();
+	RaptorTex->Name = "RaptorTex";
+	RaptorTex->Filename = L"../../Textures/Raptor.dds";
+	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
+		mCommandList.Get(), RaptorTex->Filename.c_str(),
+		RaptorTex->Resource, RaptorTex->UploadHeap));
+
+	mTextures[RaptorTex->Name] = std::move(RaptorTex);
+
+	//Desert
+	auto DesertTex = std::make_unique<Texture>();
+	DesertTex->Name = "DesertTex";
+	DesertTex->Filename = L"../../Textures/Desert.dds";
+	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
+		mCommandList.Get(), DesertTex->Filename.c_str(),
+		DesertTex->Resource, DesertTex->UploadHeap));
+
+	mTextures[DesertTex->Name] = std::move(DesertTex);
+
+	//StarWarsTexTitle
+	auto StarWarsTexTitle = std::make_unique<Texture>();
+	StarWarsTexTitle->Name = "StarWarsTexTitle";
+	StarWarsTexTitle->Filename = L"../../Textures/StarWars_Title.dds";
+	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
+		mCommandList.Get(), StarWarsTexTitle->Filename.c_str(),
+		StarWarsTexTitle->Resource, StarWarsTexTitle->UploadHeap));
+
+	mTextures[StarWarsTexTitle->Name] = std::move(StarWarsTexTitle);
+
+	//StarWars_Menu
+	auto StarWars_Menu = std::make_unique<Texture>();
+	StarWars_Menu->Name = "StarWarsTexMenu";
+	StarWars_Menu->Filename = L"../../Textures/StarWars_Menu.dds";
+	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
+		mCommandList.Get(), StarWars_Menu->Filename.c_str(),
+		StarWars_Menu->Resource, StarWars_Menu->UploadHeap));
+
+	mTextures[StarWars_Menu->Name] = std::move(StarWars_Menu);
+
+	//StarWars_Option
+	auto StarWarsTexPause = std::make_unique<Texture>();
+	StarWarsTexPause->Name = "StarWarsTexPause";
+	StarWarsTexPause->Filename = L"../../Textures/StarWars_Pause.dds";
+	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
+		mCommandList.Get(), StarWarsTexPause->Filename.c_str(),
+		StarWarsTexPause->Resource, StarWarsTexPause->UploadHeap));
+
+	mTextures[StarWarsTexPause->Name] = std::move(StarWarsTexPause);
+}
+
+void Game::CreateTexture(std::string Name, std::wstring FileName)
+{
+	auto texture = std::make_unique<Texture>();
+	texture->Name = Name;
+	texture->Filename = FileName;
+	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
+		mCommandList.Get(), texture->Filename.c_str(),
+		texture->Resource, texture->UploadHeap));
+	mTextures[texture->Name] = std::move(texture);
 }
 
 void Game::BuildRootSignature()
@@ -399,7 +451,7 @@ void Game::BuildDescriptorHeaps()
 	// Create the SRV heap.
 	//
 	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
-	srvHeapDesc.NumDescriptors = 3;
+	srvHeapDesc.NumDescriptors = 6;
 	srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	ThrowIfFailed(md3dDevice->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&mSrvDescriptorHeap)));
@@ -412,6 +464,9 @@ void Game::BuildDescriptorHeaps()
 	auto EagleTex = mTextures["EagleTex"]->Resource;
 	auto RaptorTex = mTextures["RaptorTex"]->Resource;
 	auto DesertTex = mTextures["DesertTex"]->Resource;
+	auto StarWarsTexTitle = mTextures["StarWarsTexTitle"]->Resource;
+	auto StarWarsTexMenu = mTextures["StarWarsTexMenu"]->Resource;
+	auto StarWarsTexPause = mTextures["StarWarsTexPause"]->Resource;
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 
@@ -447,7 +502,18 @@ void Game::BuildDescriptorHeaps()
 	srvDesc.Format = DesertTex->GetDesc().Format;
 	md3dDevice->CreateShaderResourceView(DesertTex.Get(), &srvDesc, hDescriptor);
 
-	//_World.buildDescriptorHeaps(GetDevice(), GetTextures(), mSrvDescriptorHeap, mCbvSrvDescriptorSize);
+	//StarWars Descriptor
+	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
+	srvDesc.Format = StarWarsTexTitle->GetDesc().Format;
+	md3dDevice->CreateShaderResourceView(StarWarsTexTitle.Get(), &srvDesc, hDescriptor);
+	//StarWars Descriptor
+	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
+	srvDesc.Format = StarWarsTexMenu->GetDesc().Format;
+	md3dDevice->CreateShaderResourceView(StarWarsTexMenu.Get(), &srvDesc, hDescriptor);
+	//StarWars Descriptor
+	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
+	srvDesc.Format = StarWarsTexPause->GetDesc().Format;
+	md3dDevice->CreateShaderResourceView(StarWarsTexPause.Get(), &srvDesc, hDescriptor);
 }
 
 void Game::BuildShadersAndInputLayout()
@@ -465,9 +531,54 @@ void Game::BuildShadersAndInputLayout()
 	};
 }
 
-void Game::BuildWorldShapeGeometry()
+void Game::BuildShapeGeometry()
 {
-	_World.buildShapeGeometry(GetDevice(), GetCommandList(), getGeometries());
+	GeometryGenerator geoGen;
+	//GeometryGenerator::MeshData box = geoGen.CreateQuad(0.0f, 0.0f, 20.0f, 10.0f, 10.0f);
+	GeometryGenerator::MeshData box = geoGen.CreateBox(1, 0, 1, 1);
+	SubmeshGeometry boxSubmesh;
+	boxSubmesh.IndexCount = (UINT)box.Indices32.size();
+	boxSubmesh.StartIndexLocation = 0;
+	boxSubmesh.BaseVertexLocation = 0;
+
+
+	std::vector<Vertex> vertices(box.Vertices.size());
+
+	for (size_t i = 0; i < box.Vertices.size(); ++i)
+	{
+		vertices[i].Pos = box.Vertices[i].Position;
+		vertices[i].Normal = box.Vertices[i].Normal;
+		vertices[i].TexC = box.Vertices[i].TexC;
+	}
+
+	std::vector<std::uint16_t> indices = box.GetIndices16();
+
+	const UINT vbByteSize = (UINT)vertices.size() * sizeof(Vertex);
+	const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint16_t);
+
+	auto geo = std::make_unique<MeshGeometry>();
+	geo->Name = "boxGeo";
+
+	ThrowIfFailed(D3DCreateBlob(vbByteSize, &geo->VertexBufferCPU));
+	CopyMemory(geo->VertexBufferCPU->GetBufferPointer(), vertices.data(), vbByteSize);
+
+	ThrowIfFailed(D3DCreateBlob(ibByteSize, &geo->IndexBufferCPU));
+	CopyMemory(geo->IndexBufferCPU->GetBufferPointer(), indices.data(), ibByteSize);
+
+	geo->VertexBufferGPU = d3dUtil::CreateDefaultBuffer(md3dDevice.Get(),
+		mCommandList.Get(), vertices.data(), vbByteSize, geo->VertexBufferUploader);
+
+	geo->IndexBufferGPU = d3dUtil::CreateDefaultBuffer(md3dDevice.Get(),
+		mCommandList.Get(), indices.data(), ibByteSize, geo->IndexBufferUploader);
+
+	geo->VertexByteStride = sizeof(Vertex);
+	geo->VertexBufferByteSize = vbByteSize;
+	geo->IndexFormat = DXGI_FORMAT_R16_UINT;
+	geo->IndexBufferByteSize = ibByteSize;
+
+	geo->DrawArgs["box"] = boxSubmesh;
+
+	mGeometries[geo->Name] = std::move(geo);
 }
 
 void Game::BuildPSOs()
@@ -503,63 +614,55 @@ void Game::BuildPSOs()
 	ThrowIfFailed(md3dDevice->CreateGraphicsPipelineState(&opaquePsoDesc, IID_PPV_ARGS(&mOpaquePSO)));
 }
 
-void Game::BuildFrameResources()
+void Game::BuildFrameResources(int renderItemCount)
 {
+	//mFrameResources.clear();
+
 	for (int i = 0; i < gNumFrameResources; ++i)
 	{
 		mFrameResources.push_back(std::make_unique<FrameResource>(md3dDevice.Get(),
-			1, (UINT)mAllRitems.size(), (UINT)mMaterials.size()));
+			1, (UINT)renderItemCount, (UINT)mMaterials.size()));
 	}
+}
+
+void Game::ResetFrameResources()
+{
+	mFrameResources.clear();
 }
 //step13
-void Game::BuildWorldMaterials()
+void Game::BuildMaterials()
 {
-	_World.loadMaterials(getMaterials());
+	mCurrentMaterialCBIndex = 0;
+	mCurrentDiffuseSrvHeapIndex = 0;
+	CreateMaterials("Eagle", XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.05f, 0.05f, 0.05f), 0.2f);
+	CreateMaterials("Raptor", XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.05f, 0.05f, 0.05f), 0.2f);
+	CreateMaterials("Desert", XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.05f, 0.05f, 0.05f), 0.2f);
+	CreateMaterials("StarWars_Title", XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.05f, 0.05f, 0.05f), 0.2f);
+	CreateMaterials("StarWars_Menu", XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.05f, 0.05f, 0.05f), 0.2f);
+	CreateMaterials("StarWars_Pause", XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.05f, 0.05f, 0.05f), 0.2f);
 }
 
-void Game::BuildRenderItems()
+void Game::CreateMaterials(std::string Name, XMFLOAT4 DiffuseAlbedo, XMFLOAT3 FresnelR0, float Roughness)
 {
-	_World.buildScene();
+	auto material = std::make_unique<Material>();
+	material->Name = Name;
+	material->MatCBIndex = mCurrentMaterialCBIndex++;
+	material->DiffuseSrvHeapIndex = mCurrentDiffuseSrvHeapIndex++;
+	material->DiffuseAlbedo = DiffuseAlbedo;
+	material->FresnelR0 = FresnelR0;
+	material->Roughness = Roughness;
 
-	// All the render items are opaque.
-	for (auto& e : mAllRitems)
-		mOpaqueRitems.push_back(e.get());
+	mMaterials[Name] = std::move(material);
 }
 
-void Game::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector<RenderItem*>& ritems)
+void Game::RegisterStates()
 {
-	UINT objCBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(ObjectConstants));
-	UINT matCBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(MaterialConstants));
-
-	auto objectCB = mCurrFrameResource->ObjectCB->Resource();
-	auto matCB = mCurrFrameResource->MaterialCB->Resource();
-
-	// For each render item...
-	for (size_t i = 0; i < ritems.size(); ++i)
-	{
-		auto ri = ritems[i];
-
-		cmdList->IASetVertexBuffers(0, 1, &ri->Geo->VertexBufferView());
-		cmdList->IASetIndexBuffer(&ri->Geo->IndexBufferView());
-		cmdList->IASetPrimitiveTopology(ri->PrimitiveType);
-
-		//step18
-		CD3DX12_GPU_DESCRIPTOR_HANDLE tex(mSrvDescriptorHeap->GetGPUDescriptorHandleForHeapStart());
-		tex.Offset(ri->Mat->DiffuseSrvHeapIndex, mCbvSrvDescriptorSize);
-
-		D3D12_GPU_VIRTUAL_ADDRESS objCBAddress = objectCB->GetGPUVirtualAddress() + ri->ObjCBIndex * objCBByteSize;
-		D3D12_GPU_VIRTUAL_ADDRESS matCBAddress = matCB->GetGPUVirtualAddress() + ri->Mat->MatCBIndex * matCBByteSize;
-
-		//step19
-		cmdList->SetGraphicsRootDescriptorTable(0, tex);
-		cmdList->SetGraphicsRootConstantBufferView(1, objCBAddress);
-		cmdList->SetGraphicsRootConstantBufferView(3, matCBAddress);
-
-		cmdList->DrawIndexedInstanced(ri->IndexCount, 1, ri->StartIndexLocation, ri->BaseVertexLocation, 0);
-	}
+	mStateStack.registerState<TitleState>(States::Title);
+	mStateStack.registerState<GameState>(States::Game);
+	mStateStack.registerState<MenuState>(States::Menu);
+	mStateStack.registerState<PauseState>(States::Pause);
 }
 
-//step21
 std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> Game::GetStaticSamplers()
 {
 	// Applications usually only need a handful of samplers.  So just define them all up front

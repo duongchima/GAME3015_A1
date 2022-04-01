@@ -1,11 +1,10 @@
 #include "SceneNode.hpp"
-#include "Command.h"
 #include "Game.hpp"
 
-SceneNode::SceneNode(Game* game)
+SceneNode::SceneNode(State* state)
 	: mChildren()
 	, mParent(nullptr)
-	, game(game)
+	, mState(state)
 {
 	mWorldPosition = XMFLOAT3(0, 0, 0);
 	mWorldScaling = XMFLOAT3(1, 1, 1);
@@ -148,8 +147,10 @@ void SceneNode::move(float x, float y, float z)
 	mWorldPosition.y += y;
 	mWorldPosition.z += z;
 }
+
 void SceneNode::onCommand(const Command& command, const GameTimer& gt)
 {
+	// Command current node, if category matches
 	if (command.category & getCategory())
 		command.action(*this, gt);
 

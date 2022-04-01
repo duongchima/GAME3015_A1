@@ -1,4 +1,4 @@
-#include "CommandQueue.h"
+#include "CommandQueue.hpp"
 #include "SceneNode.hpp"
 
 
@@ -18,3 +18,5 @@ bool CommandQueue::isEmpty() const
 {
 	return mQueue.empty();
 }
+
+

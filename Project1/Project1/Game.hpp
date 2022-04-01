@@ -1,5 +1,7 @@
 #include "World.hpp"
-#include "Player.h"
+#include "Player.hpp"
+#include "StateStack.hpp"
+
 class Game : public D3DApp
 {
 public:
@@ -11,44 +13,36 @@ public:
 	virtual bool Initialize()override;
 private:
 	virtual void OnResize()override;
+	//void ProcessInput();
 	virtual void Update(const GameTimer& gt)override;
 	virtual void Draw(const GameTimer& gt)override;
 
 	virtual void OnMouseDown(WPARAM btnState, int x, int y)override;
 	virtual void OnMouseUp(WPARAM btnState, int x, int y)override;
 	virtual void OnMouseMove(WPARAM btnState, int x, int y)override;
+	virtual void OnKeyDown(WPARAM btnState)override;
 
-	void ProcessInput();
-	void OnKeyboardInput(const GameTimer& gt);
+	//void OnKeyboardInput(const GameTimer& gt);
 	void UpdateCamera(const GameTimer& gt);
 	void AnimateMaterials(const GameTimer& gt);
 	void UpdateObjectCBs(const GameTimer& gt);
 	void UpdateMaterialCBs(const GameTimer& gt);
 	void UpdateMainPassCB(const GameTimer& gt);
-
-	// Load World Specific Settings
-	void LoadWorldTextures();
-	void BuildWorldMaterials();
-	void BuildWorldShapeGeometry();
-
-	// Load Game Settings
-	void BuildRootSignature();
-	void BuildDescriptorHeaps();
-	void BuildShadersAndInputLayout();
-	void BuildPSOs();
-	void BuildFrameResources();
 	
-	void BuildRenderItems();
-	void DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector<RenderItem*>& ritems);
+	void CreateTexture(std::string Name, std::wstring FileName);
+	void CreateMaterials(std::string Name, XMFLOAT4 DiffuseAlbedo, XMFLOAT3 FresnelR0, float Roughness);
+
+	void RegisterStates();
 
 	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> GetStaticSamplers();
 
-private:
+public:
 
 	std::vector<std::unique_ptr<FrameResource>> mFrameResources;
 	FrameResource* mCurrFrameResource = nullptr;
 	int mCurrFrameResourceIndex = 0;
-
+	int mCurrentMaterialCBIndex = 0; 
+	int mCurrentDiffuseSrvHeapIndex = 0; 
 	UINT mCbvSrvDescriptorSize = 0;
 
 	ComPtr<ID3D12RootSignature> mRootSignature = nullptr;
@@ -66,28 +60,40 @@ private:
 
 	ComPtr<ID3D12PipelineState> mOpaquePSO = nullptr;
 
-	std::vector<std::unique_ptr<RenderItem>> mAllRitems;
+	// List of all the render items.
+	//std::vector<std::unique_ptr<RenderItem>> mAllRitems;
 
-	std::vector<RenderItem*> mOpaqueRitems;
+	// Render items divided by PSO.
+	//std::vector<RenderItem*> mOpaqueRitems;
 
 	PassConstants mMainPassCB;
 
-	POINT mLastMousePos;
-	
-	XMFLOAT3 mEyePos = { 0.0f, 0.0f, 0.0f };
-	XMFLOAT4X4 mView = MathHelper::Identity4x4();
-	XMFLOAT4X4 mProj = MathHelper::Identity4x4();
-	float mTheta = 1.5f * XM_PI;
-	float mPhi = 0.2f * XM_PI;
-	float mRadius = 15.0f;
-	Player mPlayer;
-	World _World;
+	//XMFLOAT3 mEyePos = { 0.0f, 0.0f, -10.0f };
+	//XMFLOAT4X4 mView = MathHelper::Identity4x4();
+	//XMFLOAT4X4 mProj = MathHelper::Identity4x4();
 
+	//float mTheta = 1.3f * XM_PI;
+	//float mPhi = 0.4f * XM_PI;
+	//float mRadius = 2.5f;
+
+	POINT mLastMousePos;
+	Camera mCamera;
+	//World mWorld;
+	Player mPlayer;
+	StateStack mStateStack;
+	
+	void BuildFrameResources(int renderItemCount);
+	void ResetFrameResources();
+	void BuildPSOs();
+	void BuildMaterials();
+	void LoadTextures();
+	void BuildRootSignature();
+	void BuildDescriptorHeaps();
+	void BuildShadersAndInputLayout();
+	void BuildShapeGeometry();
 public:
-	std::vector<std::unique_ptr<RenderItem>>& getRenderItems() { return mAllRitems; }
+	ID3D12GraphicsCommandList*  getCmdList() { return mCommandList.Get(); }
+	//std::vector<std::unique_ptr<RenderItem>>& getRenderItems() { return mAllRitems; }
 	std::unordered_map<std::string, std::unique_ptr<Material>>& getMaterials() { return mMaterials; }
-	std::unordered_map<std::string, std::unique_ptr<Texture>>& GetTextures() { return mTextures; }
 	std::unordered_map<std::string, std::unique_ptr<MeshGeometry>>& getGeometries() { return mGeometries; }
-	Microsoft::WRL::ComPtr<ID3D12Device>& GetDevice() { return md3dDevice; }
-	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>& GetCommandList() { return mCommandList; }
 };
