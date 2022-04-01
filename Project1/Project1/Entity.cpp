@@ -1,6 +1,6 @@
 #include "Entity.hpp"
 
-Entity::Entity(Game* game) : SceneNode(game), mVelocity(0, 0, 0)
+Entity::Entity(State* state) : SceneNode(state), mVelocity(0, 0, 0)
 {
 }
 
@@ -28,11 +28,22 @@ void Entity::accelerate(XMFLOAT3 velocity)
 	mVelocity.z = mVelocity.z + velocity.z;
 }
 
+void Entity::accelerate(float vx, float vy, float vz)
+{
+	mVelocity.x = mVelocity.x + vx;
+	mVelocity.y = mVelocity.y + vy;
+	mVelocity.z = mVelocity.z + vz;
+}
+
 void Entity::updateCurrent(const GameTimer& gt) 
 {
-	mPosition.x = mVelocity.x * gt.DeltaTime();
-	mPosition.y = mVelocity.y * gt.DeltaTime();
-	mPosition.z = mVelocity.z * gt.DeltaTime();
+	XMFLOAT3 mV;
+	mV.x = mVelocity.x * gt.DeltaTime();
+	mV.y = mVelocity.y * gt.DeltaTime();
+	mV.z = mVelocity.z * gt.DeltaTime();
 
-	move(mPosition.x, mPosition.y, mPosition.z);
+	move(mV.x, mV.y, mV.z);
+
+	renderer->World = getWorldTransform();
+	renderer->NumFramesDirty++;
 }

@@ -1,3 +1,11 @@
+//***************************************************************************************
+// Shows how to draw a box in Direct3D 12.
+//
+// Controls:
+//   Hold the left mouse button down and move the mouse to rotate.
+//   Hold the right mouse button down and move the mouse to zoom in and out.
+//***************************************************************************************
+
 #include "Game.hpp"
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,

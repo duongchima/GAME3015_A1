@@ -6,7 +6,6 @@
 #include "../../Common/Camera.h"
 #include "FrameResource.h"
 
-
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
 using namespace DirectX::PackedVector;
@@ -40,7 +39,7 @@ struct RenderItem
 	MeshGeometry* Geo = nullptr;
 
 	// Primitive topology.
-	D3D12_PRIMITIVE_TOPOLOGY PrimitiveType = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	D3D12_PRIMITIVE_TOPOLOGY PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
 	// DrawIndexedInstanced parameters.
 	UINT IndexCount = 0;
@@ -48,8 +47,9 @@ struct RenderItem
 	int BaseVertexLocation = 0;
 };
 
-class Game;
+class State;
 struct Command;
+
 class SceneNode
 {
 public:
@@ -57,7 +57,7 @@ public:
 
 
 public:
-	SceneNode(Game* game);
+	SceneNode(State* state);
 
 	void					attachChild(Ptr child);
 	Ptr						detachChild(const SceneNode& node);
@@ -77,8 +77,10 @@ public:
 	XMFLOAT4X4				getTransform() const;
 
 	void					move(float x, float y, float z);
+
 	void					onCommand(const Command& command, const GameTimer& gt);
 	virtual unsigned int	getCategory() const;
+
 private:
 	virtual void			updateCurrent(const GameTimer& gt);
 	void					updateChildren(const GameTimer& gt);
@@ -89,7 +91,7 @@ private:
 	void					buildChildren();
 
 protected:
-	Game*					game;
+	State*					mState;
 	RenderItem*				renderer;
 private:
 	XMFLOAT3				mWorldPosition;

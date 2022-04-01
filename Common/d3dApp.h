@@ -1,5 +1,3 @@
-
-
 #pragma once
 
 #if defined(DEBUG) || defined(_DEBUG)
@@ -51,6 +49,8 @@ protected:
 	virtual void OnMouseUp(WPARAM btnState, int x, int y)  { }
 	virtual void OnMouseMove(WPARAM btnState, int x, int y){ }
 
+    // Overrides for Handling Keyboard Input
+    virtual void OnKeyDown(WPARAM btnState) { }
 protected:
 
 	bool InitMainWindow();
