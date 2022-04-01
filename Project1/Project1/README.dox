@@ -12,5 +12,5 @@
 *7 - SceneNode
 *8 - SpriteNode
 *9 - World
-* @attention Player movement with WASD/arrow keys or LMB and RMB. Dragging LMB will move the camera. 
+* @attention Player movement with WASD/arrow keys or LMB and RMB.
 */
