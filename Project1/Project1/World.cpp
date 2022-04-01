@@ -1,4 +1,5 @@
 #include "World.hpp"
+#include <iostream>
 
 World::World(Game* game)
 	: mSceneGraph(new SceneNode(game))
@@ -19,28 +20,41 @@ void World::update(const GameTimer& gt)
 
 	mSceneGraph->update(gt);
 
-	//XMFLOAT3 LeftEnemyPos = mEnemy[0]->getWorldPosition();
-	//XMFLOAT3 RightEnemyPos = mEnemy[1]->getWorldPosition();
-	//XMFLOAT3 velocity = mPlayerAircraft->getVelocity();
+	if (mPlayerAircraft->getVelocity().y > 0) mPlayerAircraft->setWorldRotation(-1, 0, 0);
 
-	//if (LeftEnemyPos.x < mWorldBounds.x || RightEnemyPos.x > mWorldBounds.y)
-	//{
-	//	velocity.x = -velocity.x;
-	//	mPlayerAircraft->setVelocity(velocity);
-	//	for (int i = 0; i < 2; i++)
-	//	{
-	//		mEnemy[i]->setVelocity(velocity);
-	//	}
-	//}
-	//if (LeftEnemyPos.y > 5.0f || LeftEnemyPos.y < 0.0f)
-	//{
-	//	velocity.y = -velocity.y;
-	//	mPlayerAircraft->setVelocity(velocity);
-	//	for (int i = 0; i < 2; i++)
-	//	{
-	//		mEnemy[i]->setVelocity(velocity);
-	//	}
-	//}
+	else if (mPlayerAircraft->getVelocity().y < 0) mPlayerAircraft->setWorldRotation(1, 0, 0);
+
+	else if (mPlayerAircraft->getVelocity().x > 0) mPlayerAircraft->setWorldRotation(0, 0, -1);
+
+	else if (mPlayerAircraft->getVelocity().x < 0) mPlayerAircraft->setWorldRotation(0, 0, 1);
+
+	else if (mPlayerAircraft->getVelocity().y == 0 || mPlayerAircraft->getVelocity().x == 0)
+		mPlayerAircraft->setWorldRotation(0, 0, 0);
+
+	if (mPlayerAircraft->getWorldPosition().x < -maxWidth)
+		mPlayerAircraft->setPosition(-maxWidth, mPlayerAircraft->getWorldPosition().y, mPlayerAircraft->getWorldPosition().z);
+
+	else if (mPlayerAircraft->getWorldPosition().x > maxWidth)
+		mPlayerAircraft->setPosition(maxWidth, mPlayerAircraft->getWorldPosition().y, mPlayerAircraft->getWorldPosition().z);
+
+	if (mPlayerAircraft->getWorldPosition().y < minHeight)
+		mPlayerAircraft->setPosition(mPlayerAircraft->getWorldPosition().x, minHeight, mPlayerAircraft->getWorldPosition().z);
+
+	else if (mPlayerAircraft->getWorldPosition().y > maxHeight)
+		mPlayerAircraft->setPosition(mPlayerAircraft->getWorldPosition().x, maxHeight, mPlayerAircraft->getWorldPosition().z);
+
+	for (int i = 0; i < totalEnemies; i++)
+	{
+		if (mEnemy[i]->getWorldPosition().x < -maxWidth || mEnemy[i]->getWorldPosition().x > maxWidth)
+		{
+			mEnemy[i]->setVelocity(-mEnemy[i]->getVelocity().x, mEnemy[i]->getVelocity().y, mEnemy[i]->getVelocity().z);
+		}
+		
+		if (mEnemy[i]->getWorldPosition().y < minHeight || mEnemy[i]->getWorldPosition().y > maxHeight)
+		{
+			mEnemy[i]->setVelocity(mEnemy[i]->getVelocity().x, -mEnemy[i]->getVelocity().y, mEnemy[i]->getVelocity().z);
+		}
+	}
 }
 
 void World::draw()
@@ -179,18 +193,19 @@ void World::buildScene()
 {
 	std::unique_ptr<Aircraft> player(new Aircraft(Aircraft::Eagle, mGame));
 	mPlayerAircraft = player.get();
-	mPlayerAircraft->setPosition(0, 1, 0);
+	mPlayerAircraft->setPosition(0, 1, -10);
 	mPlayerAircraft->setScale(3.0, 3.0, 3.0);
 	mPlayerAircraft->setVelocity(2.5f, 2.0f, 0.0f);
 	mSceneGraph->attachChild(std::move(player));
 
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < totalEnemies; i++)
 	{
 		std::unique_ptr<Aircraft> enemy1 (new Aircraft(Aircraft::Raptor, mGame));
 		mEnemy[i] = enemy1.get();
-		mEnemy[i]->setPosition(mPlayerAircraft->getWorldPosition().x + (i * 5.5f - 2.5f), mPlayerAircraft->getWorldPosition().y, mPlayerAircraft->getWorldPosition().z + 5.25f);
+		mEnemy[i]->setPosition(mPlayerAircraft->getWorldPosition().x * i, (rand() % 5) + 5, mPlayerAircraft->getWorldPosition().z + 10.0f);
 		mEnemy[i]->setScale(3.0, 3.0, 3.0);
-		mEnemy[i]->setVelocity(2.5f, 2.0f, 0.0f);
+		mEnemy[i]->setWorldRotation(1, 0, 0);
+		mEnemy[i]->setVelocity(2.f * i + i, 2.0f, 0.0f);
 		mSceneGraph->attachChild(std::move(enemy1));
 	}
 

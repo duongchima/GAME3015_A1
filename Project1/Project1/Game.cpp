@@ -20,7 +20,7 @@ bool Game::Initialize()
 		return false;
 
 
-	_World.GetCamera()->SetPosition(0, 5, 0);
+	_World.GetCamera()->SetPosition(0, 100, 0);
 	_World.GetCamera()->Pitch(3.14 / 2);
 
 	ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
@@ -163,34 +163,34 @@ void Game::OnMouseUp(WPARAM btnState, int x, int y)
 
 void Game::OnMouseMove(WPARAM btnState, int x, int y)
 {
-	if ((btnState & MK_LBUTTON) != 0)
-	{
-		// Make each pixel correspond to a quarter of a degree.
-		float dx = XMConvertToRadians(0.25f * static_cast<float>(x - mLastMousePos.x));
-		float dy = XMConvertToRadians(0.25f * static_cast<float>(y - mLastMousePos.y));
+	//if ((btnState & MK_LBUTTON) != 0)
+	//{
+	//	// Make each pixel correspond to a quarter of a degree.
+	//	float dx = XMConvertToRadians(0.25f * static_cast<float>(x - mLastMousePos.x));
+	//	float dy = XMConvertToRadians(0.25f * static_cast<float>(y - mLastMousePos.y));
 
-		// Update angles based on input to orbit camera around box.
-		mTheta += dx;
-		mPhi += dy;
+	//	// Update angles based on input to orbit camera around box.
+	//	mTheta += dx;
+	//	mPhi += dy;
 
-		// Restrict the angle mPhi.
-		mPhi = MathHelper::Clamp(mPhi, 0.1f, MathHelper::Pi - 0.1f);
-	}
-	else if ((btnState & MK_RBUTTON) != 0)
-	{
-		// Make each pixel correspond to 0.2 unit in the scene.
-		float dx = 0.05f * static_cast<float>(x - mLastMousePos.x);
-		float dy = 0.05f * static_cast<float>(y - mLastMousePos.y);
+	//	// Restrict the angle mPhi.
+	//	mPhi = MathHelper::Clamp(mPhi, 0.1f, MathHelper::Pi - 0.1f);
+	//}
+	//else if ((btnState & MK_RBUTTON) != 0)
+	//{
+	//	// Make each pixel correspond to 0.2 unit in the scene.
+	//	float dx = 0.05f * static_cast<float>(x - mLastMousePos.x);
+	//	float dy = 0.05f * static_cast<float>(y - mLastMousePos.y);
 
-		// Update the camera radius based on input.
-		mRadius += dx - dy;
+	//	// Update the camera radius based on input.
+	//	mRadius += dx - dy;
 
-		// Restrict the radius.
-		mRadius = MathHelper::Clamp(mRadius, 5.0f, 150.0f);
-	}
+	//	// Restrict the radius.
+	//	mRadius = MathHelper::Clamp(mRadius, 5.0f, 150.0f);
+	//}
 
-	mLastMousePos.x = x;
-	mLastMousePos.y = y;
+	//mLastMousePos.x = x;
+	//mLastMousePos.y = y;
 }
 
 void Game::ProcessInput()
@@ -242,9 +242,9 @@ void Game::UpdateCamera(const GameTimer& gt)
 	mEyePos.y = mRadius * cosf(mPhi);
 
 	// Build the view matrix.
-	XMVECTOR pos = XMVectorSet(mEyePos.x, mEyePos.y, mEyePos.z, 1.0f);
+	XMVECTOR pos = XMVectorSet(mEyePos.x, mEyePos.y + 10, mEyePos.z - 40, 1.0f);
 	XMVECTOR target = XMVectorZero();
-	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	XMVECTOR up = XMVectorSet(0.0f, 5.0f, 20.0f, 0.0f);
 
 	XMMATRIX view = XMMatrixLookAtLH(pos, target, up);
 	XMStoreFloat4x4(&mView, view);

@@ -50,10 +50,20 @@ private:
 	SceneNode* mSceneGraph;
 	std::array<SceneNode*, LayerCount> mSceneLayers;
 
+	const static int totalEnemies = 5;
+
+	const static int maxHeight = 15;
+	const static int minHeight = 5;
+
+	const static int maxWidth = 15;
+	const static int minWidth = 5;
+
 	XMFLOAT4 mWorldBounds;
 	XMFLOAT2 mSpawnPosition;
 	float mScrollSpeed;
 	Aircraft* mPlayerAircraft;
 	SpriteNode* mBackground;
-	Aircraft* mEnemy[];
+	Aircraft* mEnemy[totalEnemies];
+
+
 };
