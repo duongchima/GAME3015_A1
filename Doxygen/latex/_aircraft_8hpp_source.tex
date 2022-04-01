@@ -1,0 +1,34 @@
+\hypertarget{_aircraft_8hpp_source}{}\doxysection{Aircraft.\+hpp}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#include "{}Entity.hpp"{}}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include <string>}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{keyword}{class }\mbox{\hyperlink{class_aircraft}{Aircraft}} :}
+\DoxyCodeLine{6     \textcolor{keyword}{public} \mbox{\hyperlink{class_entity}{Entity}}}
+\DoxyCodeLine{7 \{}
+\DoxyCodeLine{8 \textcolor{keyword}{public}:}
+\DoxyCodeLine{9     \textcolor{keyword}{enum} Type}
+\DoxyCodeLine{10     \{}
+\DoxyCodeLine{11         Eagle,}
+\DoxyCodeLine{12         Raptor,}
+\DoxyCodeLine{13     \};}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 }
+\DoxyCodeLine{16 \textcolor{keyword}{public}:}
+\DoxyCodeLine{17     \mbox{\hyperlink{class_aircraft}{Aircraft}}(Type type, \mbox{\hyperlink{class_game}{Game}}* game);}
+\DoxyCodeLine{18     \textcolor{keyword}{virtual} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} getCategory() \textcolor{keyword}{const};}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{20 \textcolor{keyword}{private}:}
+\DoxyCodeLine{21     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void}        drawCurrent() \textcolor{keyword}{const};}
+\DoxyCodeLine{22     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void}        updateCurrent(); }
+\DoxyCodeLine{23     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void}        buildCurrent();}
+\DoxyCodeLine{24 }
+\DoxyCodeLine{25 }
+\DoxyCodeLine{26 \textcolor{keyword}{private}:}
+\DoxyCodeLine{27     Type                mType;}
+\DoxyCodeLine{28     std::string         mSprite;}
+\DoxyCodeLine{29 \};}
+
+\end{DoxyCode}

@@ -1,0 +1,44 @@
+\hypertarget{_player_8h_source}{}\doxysection{Player.\+h}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#include "{}Command.h"{}}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include <map>}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{keyword}{class }\mbox{\hyperlink{class_command_queue}{CommandQueue}};}
+\DoxyCodeLine{6 }
+\DoxyCodeLine{7 \textcolor{keyword}{class }\mbox{\hyperlink{class_player}{Player}}}
+\DoxyCodeLine{8 \{}
+\DoxyCodeLine{9 \textcolor{keyword}{public}:}
+\DoxyCodeLine{10     \mbox{\hyperlink{class_player}{Player}}();}
+\DoxyCodeLine{11     \textcolor{keywordtype}{void}                    handleEvent(\mbox{\hyperlink{class_command_queue}{CommandQueue}}\& commands);}
+\DoxyCodeLine{12     \textcolor{keywordtype}{void}                    handleRealtimeInput(\mbox{\hyperlink{class_command_queue}{CommandQueue}}\& commands);}
+\DoxyCodeLine{13 }
+\DoxyCodeLine{14     \textcolor{keyword}{enum} Action}
+\DoxyCodeLine{15     \{}
+\DoxyCodeLine{16         Rotate,}
+\DoxyCodeLine{17         Shoot,}
+\DoxyCodeLine{18 }
+\DoxyCodeLine{19         MoveLeft,}
+\DoxyCodeLine{20         MoveRight,}
+\DoxyCodeLine{21         MoveUp,}
+\DoxyCodeLine{22         MoveDown,}
+\DoxyCodeLine{23         ActionCount}
+\DoxyCodeLine{24     \};}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{26     \textcolor{keywordtype}{void}                    assignKey(Action action, \textcolor{keywordtype}{char} key);}
+\DoxyCodeLine{27     \textcolor{keywordtype}{char}                    getAssignedKey(Action action) \textcolor{keyword}{const};}
+\DoxyCodeLine{28 }
+\DoxyCodeLine{29 \textcolor{keyword}{private}:}
+\DoxyCodeLine{30     \textcolor{keywordtype}{void}                    initializeActions();}
+\DoxyCodeLine{31     \textcolor{keyword}{static} \textcolor{keywordtype}{bool}             isRealtimeAction(Action action);}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33 \textcolor{keyword}{private}:}
+\DoxyCodeLine{34     std::map<char, Action>                  mKeyBinding;}
+\DoxyCodeLine{35     std::map<Action, Command>               mActionBinding;}
+\DoxyCodeLine{36     std::map<char, bool>                    mKeyFlag;}
+\DoxyCodeLine{37 }
+\DoxyCodeLine{38 }
+\DoxyCodeLine{39 \};}
+
+\end{DoxyCode}
