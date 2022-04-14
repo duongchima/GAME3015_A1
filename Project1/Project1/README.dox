@@ -12,5 +12,11 @@
 *7 - SceneNode
 *8 - SpriteNode
 *9 - World
-* @attention Player movement with WASD/arrow keys or LMB and RMB.
+*10 - TitleState
+*11 - MenuState
+*12 - GameState
+*13 - PauseState
+*14 - State
+*15 - StateStack
+* @attention Player movement with WASD/arrow keys or LMB and RMB. Press [S] key to start game, [P] key to pause, and [Q] to return to main screen/quit game.
 */

@@ -21,23 +21,101 @@ Inheritance diagram for Game\+:\begin{figure}[H]
 \mbox{\Hypertarget{class_game_a16354d232327f6c21319713bf6983674}\label{class_game_a16354d232327f6c21319713bf6983674}} 
 virtual bool {\bfseries Initialize} () override
 \item 
-\mbox{\Hypertarget{class_game_aab13f3fdd19f7fec4d64922e36cf3088}\label{class_game_aab13f3fdd19f7fec4d64922e36cf3088}} 
-std\+::vector$<$ std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{struct_render_item}{Render\+Item}} $>$ $>$ \& {\bfseries get\+Render\+Items} ()
+\mbox{\Hypertarget{class_game_a4545c2912bedea81f43783b24df89b34}\label{class_game_a4545c2912bedea81f43783b24df89b34}} 
+void {\bfseries Build\+Frame\+Resources} (int render\+Item\+Count)
+\item 
+\mbox{\Hypertarget{class_game_aa95aef9aabba3278be080bfc8437e735}\label{class_game_aa95aef9aabba3278be080bfc8437e735}} 
+void {\bfseries Reset\+Frame\+Resources} ()
+\item 
+\mbox{\Hypertarget{class_game_aa0934b45052f43934eb93fd013ca23a8}\label{class_game_aa0934b45052f43934eb93fd013ca23a8}} 
+void {\bfseries Build\+PSOs} ()
+\item 
+\mbox{\Hypertarget{class_game_a8150ddca90b1ce3c38becca970246d99}\label{class_game_a8150ddca90b1ce3c38becca970246d99}} 
+void {\bfseries Build\+Materials} ()
+\item 
+\mbox{\Hypertarget{class_game_ad23eba18656a646756a98bcda25a98a4}\label{class_game_ad23eba18656a646756a98bcda25a98a4}} 
+void {\bfseries Load\+Textures} ()
+\item 
+\mbox{\Hypertarget{class_game_aa02e07384ccea21f7421ca60967c1fa5}\label{class_game_aa02e07384ccea21f7421ca60967c1fa5}} 
+void {\bfseries Build\+Root\+Signature} ()
+\item 
+\mbox{\Hypertarget{class_game_a62c79f98ef99a7ee0c54e3ae23ab0173}\label{class_game_a62c79f98ef99a7ee0c54e3ae23ab0173}} 
+void {\bfseries Build\+Descriptor\+Heaps} ()
+\item 
+\mbox{\Hypertarget{class_game_adc0692c304c05a5a281d88622b39c498}\label{class_game_adc0692c304c05a5a281d88622b39c498}} 
+void {\bfseries Build\+Shaders\+And\+Input\+Layout} ()
+\item 
+\mbox{\Hypertarget{class_game_a6ee7b6d7f54345be7f6b406166dccb45}\label{class_game_a6ee7b6d7f54345be7f6b406166dccb45}} 
+void {\bfseries Build\+Shape\+Geometry} ()
+\item 
+\mbox{\Hypertarget{class_game_a9283a2ccc7cad9fdd4b25f7979d3c5c1}\label{class_game_a9283a2ccc7cad9fdd4b25f7979d3c5c1}} 
+ID3\+D12\+Graphics\+Command\+List $\ast$ {\bfseries get\+Cmd\+List} ()
 \item 
 \mbox{\Hypertarget{class_game_a2ab854095110829c9fb607b8bf3b50e1}\label{class_game_a2ab854095110829c9fb607b8bf3b50e1}} 
 std\+::unordered\+\_\+map$<$ std\+::string, std\+::unique\+\_\+ptr$<$ Material $>$ $>$ \& {\bfseries get\+Materials} ()
 \item 
-\mbox{\Hypertarget{class_game_a28156d8ae0425c8c80fd80c34c9ae92b}\label{class_game_a28156d8ae0425c8c80fd80c34c9ae92b}} 
-std\+::unordered\+\_\+map$<$ std\+::string, std\+::unique\+\_\+ptr$<$ Texture $>$ $>$ \& {\bfseries Get\+Textures} ()
-\item 
 \mbox{\Hypertarget{class_game_a8fecc6dedc120a94d9940ad5d7518242}\label{class_game_a8fecc6dedc120a94d9940ad5d7518242}} 
 std\+::unordered\+\_\+map$<$ std\+::string, std\+::unique\+\_\+ptr$<$ Mesh\+Geometry $>$ $>$ \& {\bfseries get\+Geometries} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{class_game_a59a846b7d627c404eddf6bdf834011ca}\label{class_game_a59a846b7d627c404eddf6bdf834011ca}} 
-Microsoft\+::\+WRL\+::\+Com\+Ptr$<$ ID3\+D12\+Device $>$ \& {\bfseries Get\+Device} ()
+\mbox{\Hypertarget{class_game_a2a9401ba48c48468ceef6771309ddff7}\label{class_game_a2a9401ba48c48468ceef6771309ddff7}} 
+std\+::vector$<$ std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{struct_frame_resource}{Frame\+Resource}} $>$ $>$ {\bfseries m\+Frame\+Resources}
 \item 
-\mbox{\Hypertarget{class_game_a600097148b87a3e94ae6e85ab2831e5a}\label{class_game_a600097148b87a3e94ae6e85ab2831e5a}} 
-Microsoft\+::\+WRL\+::\+Com\+Ptr$<$ ID3\+D12\+Graphics\+Command\+List $>$ \& {\bfseries Get\+Command\+List} ()
+\mbox{\Hypertarget{class_game_a6119ac12b9dafae4e105ac9b4e80c1b2}\label{class_game_a6119ac12b9dafae4e105ac9b4e80c1b2}} 
+\mbox{\hyperlink{struct_frame_resource}{Frame\+Resource}} $\ast$ {\bfseries m\+Curr\+Frame\+Resource} = nullptr
+\item 
+\mbox{\Hypertarget{class_game_a1f687875ba94b87162a7dc90b80b0092}\label{class_game_a1f687875ba94b87162a7dc90b80b0092}} 
+int {\bfseries m\+Curr\+Frame\+Resource\+Index} = 0
+\item 
+\mbox{\Hypertarget{class_game_a37526fb9e3451bf02dfdd41f3c97ccef}\label{class_game_a37526fb9e3451bf02dfdd41f3c97ccef}} 
+int {\bfseries m\+Current\+Material\+CBIndex} = 0
+\item 
+\mbox{\Hypertarget{class_game_aa95625268320c7275f716145cee5a741}\label{class_game_aa95625268320c7275f716145cee5a741}} 
+int {\bfseries m\+Current\+Diffuse\+Srv\+Heap\+Index} = 0
+\item 
+\mbox{\Hypertarget{class_game_ad7a064571877d4b8becd1f53c98cafa9}\label{class_game_ad7a064571877d4b8becd1f53c98cafa9}} 
+UINT {\bfseries m\+Cbv\+Srv\+Descriptor\+Size} = 0
+\item 
+\mbox{\Hypertarget{class_game_a987fac1aded1b4f4b9495eb0f1464c12}\label{class_game_a987fac1aded1b4f4b9495eb0f1464c12}} 
+Com\+Ptr$<$ ID3\+D12\+Root\+Signature $>$ {\bfseries m\+Root\+Signature} = nullptr
+\item 
+\mbox{\Hypertarget{class_game_a85befdbe03bbcdd30ad94cd64e0a1bd1}\label{class_game_a85befdbe03bbcdd30ad94cd64e0a1bd1}} 
+Com\+Ptr$<$ ID3\+D12\+Descriptor\+Heap $>$ {\bfseries m\+Srv\+Descriptor\+Heap} = nullptr
+\item 
+\mbox{\Hypertarget{class_game_a0e53612a0a54bdd46ea1d8b071260b77}\label{class_game_a0e53612a0a54bdd46ea1d8b071260b77}} 
+std\+::unordered\+\_\+map$<$ std\+::string, std\+::unique\+\_\+ptr$<$ Mesh\+Geometry $>$ $>$ {\bfseries m\+Geometries}
+\item 
+\mbox{\Hypertarget{class_game_a871400f233e46cc637f383106e89dd71}\label{class_game_a871400f233e46cc637f383106e89dd71}} 
+std\+::unordered\+\_\+map$<$ std\+::string, std\+::unique\+\_\+ptr$<$ Material $>$ $>$ {\bfseries m\+Materials}
+\item 
+\mbox{\Hypertarget{class_game_a914940e399d2418018640ef3da130371}\label{class_game_a914940e399d2418018640ef3da130371}} 
+std\+::unordered\+\_\+map$<$ std\+::string, std\+::unique\+\_\+ptr$<$ Texture $>$ $>$ {\bfseries m\+Textures}
+\item 
+\mbox{\Hypertarget{class_game_a5d821a872c24ff21b97300d24e37ac23}\label{class_game_a5d821a872c24ff21b97300d24e37ac23}} 
+std\+::unordered\+\_\+map$<$ std\+::string, Com\+Ptr$<$ ID3\+DBlob $>$ $>$ {\bfseries m\+Shaders}
+\item 
+\mbox{\Hypertarget{class_game_a4f5868aab9c96810369a9ab91dec1d2b}\label{class_game_a4f5868aab9c96810369a9ab91dec1d2b}} 
+std\+::vector$<$ D3\+D12\+\_\+\+INPUT\+\_\+\+ELEMENT\+\_\+\+DESC $>$ {\bfseries m\+Input\+Layout}
+\item 
+\mbox{\Hypertarget{class_game_acb640d01b04bbb82f3f2b02ac09554b2}\label{class_game_acb640d01b04bbb82f3f2b02ac09554b2}} 
+Com\+Ptr$<$ ID3\+D12\+Pipeline\+State $>$ {\bfseries m\+Opaque\+PSO} = nullptr
+\item 
+\mbox{\Hypertarget{class_game_ad2759008a4629646703b6e34e0501f6c}\label{class_game_ad2759008a4629646703b6e34e0501f6c}} 
+\mbox{\hyperlink{struct_pass_constants}{Pass\+Constants}} {\bfseries m\+Main\+Pass\+CB}
+\item 
+\mbox{\Hypertarget{class_game_ab5cce9551fdd8b346b36747d6f4d3a38}\label{class_game_ab5cce9551fdd8b346b36747d6f4d3a38}} 
+POINT {\bfseries m\+Last\+Mouse\+Pos}
+\item 
+\mbox{\Hypertarget{class_game_a042dbbcf404fad865bdf72e534c675d5}\label{class_game_a042dbbcf404fad865bdf72e534c675d5}} 
+Camera {\bfseries m\+Camera}
+\item 
+\mbox{\Hypertarget{class_game_a1633a90f20203779bc1a1171c2d7ad77}\label{class_game_a1633a90f20203779bc1a1171c2d7ad77}} 
+\mbox{\hyperlink{class_player}{Player}} {\bfseries m\+Player}
+\item 
+\mbox{\Hypertarget{class_game_a0baead77f3725081b986fb9d569c17dd}\label{class_game_a0baead77f3725081b986fb9d569c17dd}} 
+\mbox{\hyperlink{class_state_stack}{State\+Stack}} {\bfseries m\+State\+Stack}
 \end{DoxyCompactItemize}
 
 

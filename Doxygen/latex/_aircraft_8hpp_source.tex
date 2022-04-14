@@ -9,26 +9,28 @@
 \DoxyCodeLine{6     \textcolor{keyword}{public} \mbox{\hyperlink{class_entity}{Entity}}}
 \DoxyCodeLine{7 \{}
 \DoxyCodeLine{8 \textcolor{keyword}{public}:}
-\DoxyCodeLine{9     \textcolor{keyword}{enum} Type}
-\DoxyCodeLine{10     \{}
-\DoxyCodeLine{11         Eagle,}
-\DoxyCodeLine{12         Raptor,}
-\DoxyCodeLine{13     \};}
-\DoxyCodeLine{14 }
+\DoxyCodeLine{9 }
+\DoxyCodeLine{10     \textcolor{keyword}{enum class} Type}
+\DoxyCodeLine{11     \{}
+\DoxyCodeLine{12         Eagle,}
+\DoxyCodeLine{13         Raptor,}
+\DoxyCodeLine{14     \};}
 \DoxyCodeLine{15 }
-\DoxyCodeLine{16 \textcolor{keyword}{public}:}
-\DoxyCodeLine{17     \mbox{\hyperlink{class_aircraft}{Aircraft}}(Type type, \mbox{\hyperlink{class_game}{Game}}* game);}
-\DoxyCodeLine{18     \textcolor{keyword}{virtual} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} getCategory() \textcolor{keyword}{const};}
-\DoxyCodeLine{19 }
-\DoxyCodeLine{20 \textcolor{keyword}{private}:}
-\DoxyCodeLine{21     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void}        drawCurrent() \textcolor{keyword}{const};}
-\DoxyCodeLine{22     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void}        updateCurrent(); }
-\DoxyCodeLine{23     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void}        buildCurrent();}
-\DoxyCodeLine{24 }
+\DoxyCodeLine{16 }
+\DoxyCodeLine{17 \textcolor{keyword}{public}:}
+\DoxyCodeLine{18     \mbox{\hyperlink{class_aircraft}{Aircraft}}(Type type, \mbox{\hyperlink{class_state}{State}}* state);}
+\DoxyCodeLine{19     \textcolor{keyword}{virtual} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} getCategory() \textcolor{keyword}{const};}
+\DoxyCodeLine{20 }
+\DoxyCodeLine{21 }
+\DoxyCodeLine{22 \textcolor{keyword}{private}:}
+\DoxyCodeLine{23     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void}        drawCurrent() \textcolor{keyword}{const};}
+\DoxyCodeLine{24     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void}        buildCurrent();}
 \DoxyCodeLine{25 }
-\DoxyCodeLine{26 \textcolor{keyword}{private}:}
-\DoxyCodeLine{27     Type                mType;}
-\DoxyCodeLine{28     std::string         mSprite;}
-\DoxyCodeLine{29 \};}
+\DoxyCodeLine{26 }
+\DoxyCodeLine{27 \textcolor{keyword}{private}:}
+\DoxyCodeLine{28     Type                mType;}
+\DoxyCodeLine{29     std::string         mSprite;}
+\DoxyCodeLine{30     \mbox{\hyperlink{struct_render_item}{RenderItem}}* mAircraftRitem;}
+\DoxyCodeLine{31 \};}
 
 \end{DoxyCode}

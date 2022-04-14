@@ -9,8 +9,8 @@ Inheritance diagram for Entity\+:\begin{figure}[H]
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{class_entity_a9f6b0ce5dcbdb9107ba1972da24003a6}\label{class_entity_a9f6b0ce5dcbdb9107ba1972da24003a6}} 
-{\bfseries Entity} (\mbox{\hyperlink{class_game}{Game}} $\ast$game)
+\mbox{\Hypertarget{class_entity_ac219200508c18e5db68225c7efb7da5d}\label{class_entity_ac219200508c18e5db68225c7efb7da5d}} 
+{\bfseries Entity} (\mbox{\hyperlink{class_state}{State}} $\ast$state)
 \item 
 \mbox{\Hypertarget{class_entity_a472e1690df5fb48c6c7f052e4cb39c78}\label{class_entity_a472e1690df5fb48c6c7f052e4cb39c78}} 
 void {\bfseries set\+Velocity} (XMFLOAT3 velocity)
@@ -24,6 +24,9 @@ XMFLOAT3 {\bfseries get\+Velocity} () const
 \mbox{\Hypertarget{class_entity_a6604e7ba4eee5511a6aa21345cbdaf28}\label{class_entity_a6604e7ba4eee5511a6aa21345cbdaf28}} 
 void {\bfseries accelerate} (XMFLOAT3 velocity)
 \item 
+\mbox{\Hypertarget{class_entity_aa2c71a179fcbb868c8ae01e98aaf79a9}\label{class_entity_aa2c71a179fcbb868c8ae01e98aaf79a9}} 
+void {\bfseries accelerate} (float vx, float vy, float vz)
+\item 
 virtual void \mbox{\hyperlink{class_entity_ac2ba9cb8ca54fff11ad7397334edcd94}{update\+Current}} (const Game\+Timer \&gt)
 \end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
@@ -31,9 +34,6 @@ virtual void \mbox{\hyperlink{class_entity_ac2ba9cb8ca54fff11ad7397334edcd94}{up
 \item 
 \mbox{\Hypertarget{class_entity_a15aa77787228598dfa35f5f822695c43}\label{class_entity_a15aa77787228598dfa35f5f822695c43}} 
 XMFLOAT3 {\bfseries m\+Velocity}
-\item 
-\mbox{\Hypertarget{class_entity_a82e6dedc154cd0b2de129d1aed602eb1}\label{class_entity_a82e6dedc154cd0b2de129d1aed602eb1}} 
-XMFLOAT3 {\bfseries m\+Position}
 \end{DoxyCompactItemize}
 \doxysubsection*{Additional Inherited Members}
 

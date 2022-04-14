@@ -8,11 +8,18 @@
 \DoxyCodeLine{5     \textcolor{keyword}{public} \mbox{\hyperlink{class_entity}{Entity}}}
 \DoxyCodeLine{6 \{}
 \DoxyCodeLine{7 \textcolor{keyword}{public}:}
-\DoxyCodeLine{8     \mbox{\hyperlink{class_sprite_node}{SpriteNode}}(\mbox{\hyperlink{class_game}{Game}}* game);}
-\DoxyCodeLine{9 }
-\DoxyCodeLine{10 \textcolor{keyword}{private}:}
-\DoxyCodeLine{11     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void}        drawCurrent() \textcolor{keyword}{const};}
-\DoxyCodeLine{12     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void}        buildCurrent();}
-\DoxyCodeLine{13 \};}
+\DoxyCodeLine{8     \mbox{\hyperlink{class_sprite_node}{SpriteNode}}(\mbox{\hyperlink{class_state}{State}}* state);}
+\DoxyCodeLine{9     \mbox{\hyperlink{struct_render_item}{RenderItem}}* mSpriteNodeRitem;}
+\DoxyCodeLine{10 }
+\DoxyCodeLine{11     \textcolor{keywordtype}{void} SetMatGeoDrawName(std::string Mat, std::string Geo, std::string DrawName);}
+\DoxyCodeLine{12 }
+\DoxyCodeLine{13 \textcolor{keyword}{private}:}
+\DoxyCodeLine{14     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void}        drawCurrent() \textcolor{keyword}{const};}
+\DoxyCodeLine{15     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void}        buildCurrent();}
+\DoxyCodeLine{16 }
+\DoxyCodeLine{17     std::string mMat;}
+\DoxyCodeLine{18     std::string mGeo;}
+\DoxyCodeLine{19     std::string mDrawName;}
+\DoxyCodeLine{20 \};}
 
 \end{DoxyCode}

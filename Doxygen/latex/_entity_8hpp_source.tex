@@ -8,19 +8,20 @@
 \DoxyCodeLine{5     \textcolor{keyword}{public} \mbox{\hyperlink{class_scene_node}{SceneNode}}}
 \DoxyCodeLine{6 \{}
 \DoxyCodeLine{7 \textcolor{keyword}{public}:}
-\DoxyCodeLine{8     \mbox{\hyperlink{class_entity}{Entity}}(\mbox{\hyperlink{class_game}{Game}}* game);}
+\DoxyCodeLine{8     \mbox{\hyperlink{class_entity}{Entity}}(\mbox{\hyperlink{class_state}{State}}* state);}
 \DoxyCodeLine{9     \textcolor{keywordtype}{void}                setVelocity(XMFLOAT3 velocity);}
 \DoxyCodeLine{10     \textcolor{keywordtype}{void}                setVelocity(\textcolor{keywordtype}{float} vx, \textcolor{keywordtype}{float} vy, \textcolor{keywordtype}{float} vz);}
 \DoxyCodeLine{11     XMFLOAT3            getVelocity() \textcolor{keyword}{const};}
 \DoxyCodeLine{12 }
 \DoxyCodeLine{13     \textcolor{keywordtype}{void}                accelerate(XMFLOAT3 velocity);}
-\DoxyCodeLine{14 }
-\DoxyCodeLine{15     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void}        updateCurrent(\textcolor{keyword}{const} GameTimer\& gt);}
+\DoxyCodeLine{14     \textcolor{keywordtype}{void}                accelerate(\textcolor{keywordtype}{float} vx, \textcolor{keywordtype}{float} vy, \textcolor{keywordtype}{float} vz);}
+\DoxyCodeLine{15 }
 \DoxyCodeLine{16 }
-\DoxyCodeLine{17 \textcolor{keyword}{public}:}
-\DoxyCodeLine{18     XMFLOAT3        mVelocity;}
-\DoxyCodeLine{19     XMFLOAT3        mPosition;}
-\DoxyCodeLine{20 \};}
-\DoxyCodeLine{21 }
+\DoxyCodeLine{17     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void}        updateCurrent(\textcolor{keyword}{const} GameTimer\& gt);}
+\DoxyCodeLine{18 }
+\DoxyCodeLine{19 \textcolor{keyword}{public}:}
+\DoxyCodeLine{20     XMFLOAT3        mVelocity;}
+\DoxyCodeLine{21 \};}
+\DoxyCodeLine{22 }
 
 \end{DoxyCode}

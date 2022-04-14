@@ -5,70 +5,57 @@
 \DoxyCodeLine{2 \textcolor{preprocessor}{\#include "{}SceneNode.hpp"{}}}
 \DoxyCodeLine{3 \textcolor{preprocessor}{\#include "{}Aircraft.hpp"{}}}
 \DoxyCodeLine{4 \textcolor{preprocessor}{\#include "{}SpriteNode.h"{}}}
-\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}CommandQueue.h"{}}}
-\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}Command.h"{}}}
-\DoxyCodeLine{7 \textcolor{keyword}{class }\mbox{\hyperlink{class_world}{World}} }
-\DoxyCodeLine{8 \{}
-\DoxyCodeLine{9 \textcolor{keyword}{public}:}
-\DoxyCodeLine{10     \textcolor{keyword}{explicit} \mbox{\hyperlink{class_world}{World}}(\mbox{\hyperlink{class_game}{Game}}* window);}
-\DoxyCodeLine{11     \textcolor{keywordtype}{void} update(\textcolor{keyword}{const} GameTimer\& gt);}
-\DoxyCodeLine{12     \textcolor{keywordtype}{void} draw();}
-\DoxyCodeLine{13     \mbox{\hyperlink{class_command_queue}{CommandQueue}}\& getCommandQueue();}
-\DoxyCodeLine{14     \mbox{\hyperlink{class_command_queue}{CommandQueue}} mCommandQueue;}
-\DoxyCodeLine{15     \textcolor{keywordtype}{void} loadTextures(Microsoft::WRL::ComPtr<ID3D12Device>\& GameDevice, }
-\DoxyCodeLine{16                       Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>\& GameCommandList,}
-\DoxyCodeLine{17                       std::unordered\_map<std::string, std::unique\_ptr<Texture>>\& GameTextures);}
-\DoxyCodeLine{18     }
-\DoxyCodeLine{19     \textcolor{keywordtype}{void} loadMaterials(std::unordered\_map<std::string, std::unique\_ptr<Material>>\& GameMaterials);}
-\DoxyCodeLine{20     \textcolor{keywordtype}{void} buildShapeGeometry(Microsoft::WRL::ComPtr<ID3D12Device>\& GameDevice,}
-\DoxyCodeLine{21                             Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>\& GameCommandList,}
-\DoxyCodeLine{22                             std::unordered\_map<std::string, std::unique\_ptr<MeshGeometry>>\& GameGeometries);}
-\DoxyCodeLine{23     }
-\DoxyCodeLine{24     \textcolor{comment}{/*void buildDescriptorHeaps(Microsoft::WRL::ComPtr<ID3D12Device>\& GameDevice, }}
-\DoxyCodeLine{25 \textcolor{comment}{                              std::unordered\_map<std::string, std::unique\_ptr<Texture>>\& GameTextures,}}
-\DoxyCodeLine{26 \textcolor{comment}{                              ComPtr<ID3D12DescriptorHeap> GameSrvDescriptorHeap,}}
-\DoxyCodeLine{27 \textcolor{comment}{                              UINT GameCbvSrvDescriptorSize}}
-\DoxyCodeLine{28 \textcolor{comment}{                             );*/}}
-\DoxyCodeLine{29     }
-\DoxyCodeLine{30     \textcolor{keywordtype}{void} buildScene();}
-\DoxyCodeLine{31 }
-\DoxyCodeLine{32     Camera* GetCamera() \{ \textcolor{keywordflow}{return} \&\_Camera; \}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}CommandQueue.hpp"{}}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}Command.hpp"{}}}
+\DoxyCodeLine{7 }
+\DoxyCodeLine{8 }
+\DoxyCodeLine{9 \textcolor{keyword}{class }\mbox{\hyperlink{class_world}{World}}}
+\DoxyCodeLine{10 \{}
+\DoxyCodeLine{11 \textcolor{keyword}{public}:}
+\DoxyCodeLine{12     \textcolor{keyword}{explicit}                            \mbox{\hyperlink{class_world}{World}}(\mbox{\hyperlink{class_state}{State}}* state);}
+\DoxyCodeLine{13     \textcolor{keywordtype}{void}                                update(\textcolor{keyword}{const} GameTimer\& gt);}
+\DoxyCodeLine{14     \textcolor{keywordtype}{void}                                draw();}
+\DoxyCodeLine{15     \textcolor{comment}{//void                              loadTextures();}}
+\DoxyCodeLine{16     \textcolor{keywordtype}{void}                                buildScene();}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18     \mbox{\hyperlink{class_command_queue}{CommandQueue}}\& getCommandQueue();}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{20 \textcolor{keyword}{private}:}
+\DoxyCodeLine{21     \mbox{\hyperlink{class_command_queue}{CommandQueue}}                        mCommandQueue;}
+\DoxyCodeLine{22 }
+\DoxyCodeLine{23     \textcolor{keywordtype}{void}                                adaptPlayerPosition();}
+\DoxyCodeLine{24     \textcolor{keywordtype}{void}                                adaptPlayerVelocity();}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{26 }
+\DoxyCodeLine{27 \textcolor{keyword}{private}:}
+\DoxyCodeLine{28     \textcolor{keyword}{enum class} Layer}
+\DoxyCodeLine{29     \{}
+\DoxyCodeLine{30         Background,}
+\DoxyCodeLine{31         Air}
+\DoxyCodeLine{32     \};}
 \DoxyCodeLine{33 }
 \DoxyCodeLine{34 }
 \DoxyCodeLine{35 \textcolor{keyword}{private}:}
-\DoxyCodeLine{36     \textcolor{keyword}{enum} Layer}
-\DoxyCodeLine{37     \{}
-\DoxyCodeLine{38         Background,}
-\DoxyCodeLine{39         Air,}
-\DoxyCodeLine{40         LayerCount}
-\DoxyCodeLine{41     \};}
-\DoxyCodeLine{42 }
+\DoxyCodeLine{36     \mbox{\hyperlink{class_state}{State}}* mState;}
+\DoxyCodeLine{37 }
+\DoxyCodeLine{38     \mbox{\hyperlink{class_scene_node}{SceneNode}}* mSceneGraph;}
+\DoxyCodeLine{39     std::array<SceneNode*, 2>   mSceneLayers;}
+\DoxyCodeLine{40 }
+\DoxyCodeLine{41 }
+\DoxyCodeLine{42     \textcolor{keyword}{const} \textcolor{keyword}{static} \textcolor{keywordtype}{int} totalEnemies = 5;}
 \DoxyCodeLine{43 }
-\DoxyCodeLine{44 \textcolor{keyword}{private}:}
-\DoxyCodeLine{45     \textcolor{comment}{// Reference to the Game Backend}}
-\DoxyCodeLine{46     \mbox{\hyperlink{class_game}{Game}}* mGame;}
-\DoxyCodeLine{47     \textcolor{comment}{// World Holds the Camera}}
-\DoxyCodeLine{48     Camera \_Camera;}
+\DoxyCodeLine{44     \textcolor{keyword}{const} \textcolor{keyword}{static} \textcolor{keywordtype}{int} maxHeight = 15;}
+\DoxyCodeLine{45     \textcolor{keyword}{const} \textcolor{keyword}{static} \textcolor{keywordtype}{int} minHeight = 5;}
+\DoxyCodeLine{46 }
+\DoxyCodeLine{47     \textcolor{keyword}{const} \textcolor{keyword}{static} \textcolor{keywordtype}{int} maxWidth = 15;}
+\DoxyCodeLine{48     \textcolor{keyword}{const} \textcolor{keyword}{static} \textcolor{keywordtype}{int} minWidth = 5;}
 \DoxyCodeLine{49 }
-\DoxyCodeLine{50     \mbox{\hyperlink{class_scene_node}{SceneNode}}* mSceneGraph;}
-\DoxyCodeLine{51     std::array<SceneNode*, LayerCount> mSceneLayers;}
-\DoxyCodeLine{52 }
-\DoxyCodeLine{53     \textcolor{keyword}{const} \textcolor{keyword}{static} \textcolor{keywordtype}{int} totalEnemies = 5;}
-\DoxyCodeLine{54 }
-\DoxyCodeLine{55     \textcolor{keyword}{const} \textcolor{keyword}{static} \textcolor{keywordtype}{int} maxHeight = 15;}
-\DoxyCodeLine{56     \textcolor{keyword}{const} \textcolor{keyword}{static} \textcolor{keywordtype}{int} minHeight = 5;}
-\DoxyCodeLine{57 }
-\DoxyCodeLine{58     \textcolor{keyword}{const} \textcolor{keyword}{static} \textcolor{keywordtype}{int} maxWidth = 15;}
-\DoxyCodeLine{59     \textcolor{keyword}{const} \textcolor{keyword}{static} \textcolor{keywordtype}{int} minWidth = 5;}
-\DoxyCodeLine{60 }
-\DoxyCodeLine{61     XMFLOAT4 mWorldBounds;}
-\DoxyCodeLine{62     XMFLOAT2 mSpawnPosition;}
-\DoxyCodeLine{63     \textcolor{keywordtype}{float} mScrollSpeed;}
-\DoxyCodeLine{64     \mbox{\hyperlink{class_aircraft}{Aircraft}}* mPlayerAircraft;}
-\DoxyCodeLine{65     \mbox{\hyperlink{class_sprite_node}{SpriteNode}}* mBackground;}
-\DoxyCodeLine{66     \mbox{\hyperlink{class_aircraft}{Aircraft}}* mEnemy[totalEnemies];}
-\DoxyCodeLine{67 }
-\DoxyCodeLine{68 }
-\DoxyCodeLine{69 \};}
+\DoxyCodeLine{50     XMFLOAT4                            mWorldBounds;}
+\DoxyCodeLine{51     XMFLOAT2                            mSpawnPosition;}
+\DoxyCodeLine{52     \textcolor{keywordtype}{float}                               mScrollSpeed;}
+\DoxyCodeLine{53     \mbox{\hyperlink{class_aircraft}{Aircraft}}* mPlayerAircraft;}
+\DoxyCodeLine{54     \mbox{\hyperlink{class_sprite_node}{SpriteNode}}* mBackground;}
+\DoxyCodeLine{55     \mbox{\hyperlink{class_aircraft}{Aircraft}}* mEnemy[totalEnemies];}
+\DoxyCodeLine{56 \};}
 
 \end{DoxyCode}
