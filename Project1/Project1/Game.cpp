@@ -29,7 +29,7 @@ bool Game::Initialize()
 
 	mMainWndCaption = L"Assignment Solution";
 
-	mCamera.SetPosition(0.0f, 50.0f, 0.0f);
+	mCamera.SetPosition(0.0f, 54.0f, 0.0f);
 	mCamera.Pitch(3.14f / 2.0f);
 
 	// Reset the command list to prep for initialization commands.
@@ -359,35 +359,35 @@ void Game::LoadTextures()
 
 	mTextures[DesertTex->Name] = std::move(DesertTex);
 
-	//StarWarsTexTitle
-	auto StarWarsTexTitle = std::make_unique<Texture>();
-	StarWarsTexTitle->Name = "StarWarsTexTitle";
-	StarWarsTexTitle->Filename = L"../../Textures/StarWars_Title.dds";
+	//AircraftsTexTitle
+	auto AircraftsTexTitle = std::make_unique<Texture>();
+	AircraftsTexTitle->Name = "AircraftsTexTitle";
+	AircraftsTexTitle->Filename = L"../../Textures/Aircrafts_Title.dds";
 	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
-		mCommandList.Get(), StarWarsTexTitle->Filename.c_str(),
-		StarWarsTexTitle->Resource, StarWarsTexTitle->UploadHeap));
+		mCommandList.Get(), AircraftsTexTitle->Filename.c_str(),
+		AircraftsTexTitle->Resource, AircraftsTexTitle->UploadHeap));
 
-	mTextures[StarWarsTexTitle->Name] = std::move(StarWarsTexTitle);
+	mTextures[AircraftsTexTitle->Name] = std::move(AircraftsTexTitle);
 
-	//StarWars_Menu
-	auto StarWars_Menu = std::make_unique<Texture>();
-	StarWars_Menu->Name = "StarWarsTexMenu";
-	StarWars_Menu->Filename = L"../../Textures/StarWars_Menu.dds";
+	//Aircrafts_Menu
+	auto Aircrafts_Menu = std::make_unique<Texture>();
+	Aircrafts_Menu->Name = "AircraftsTexMenu";
+	Aircrafts_Menu->Filename = L"../../Textures/Aircrafts_Menu.dds";
 	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
-		mCommandList.Get(), StarWars_Menu->Filename.c_str(),
-		StarWars_Menu->Resource, StarWars_Menu->UploadHeap));
+		mCommandList.Get(), Aircrafts_Menu->Filename.c_str(),
+		Aircrafts_Menu->Resource, Aircrafts_Menu->UploadHeap));
 
-	mTextures[StarWars_Menu->Name] = std::move(StarWars_Menu);
+	mTextures[Aircrafts_Menu->Name] = std::move(Aircrafts_Menu);
 
-	//StarWars_Option
-	auto StarWarsTexPause = std::make_unique<Texture>();
-	StarWarsTexPause->Name = "StarWarsTexPause";
-	StarWarsTexPause->Filename = L"../../Textures/StarWars_Pause.dds";
+	//Aircrafts_Option
+	auto AircraftsTexPause = std::make_unique<Texture>();
+	AircraftsTexPause->Name = "AircraftsTexPause";
+	AircraftsTexPause->Filename = L"../../Textures/Aircrafts_Pause.dds";
 	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
-		mCommandList.Get(), StarWarsTexPause->Filename.c_str(),
-		StarWarsTexPause->Resource, StarWarsTexPause->UploadHeap));
+		mCommandList.Get(), AircraftsTexPause->Filename.c_str(),
+		AircraftsTexPause->Resource, AircraftsTexPause->UploadHeap));
 
-	mTextures[StarWarsTexPause->Name] = std::move(StarWarsTexPause);
+	mTextures[AircraftsTexPause->Name] = std::move(AircraftsTexPause);
 }
 
 void Game::CreateTexture(std::string Name, std::wstring FileName)
@@ -464,9 +464,9 @@ void Game::BuildDescriptorHeaps()
 	auto EagleTex = mTextures["EagleTex"]->Resource;
 	auto RaptorTex = mTextures["RaptorTex"]->Resource;
 	auto DesertTex = mTextures["DesertTex"]->Resource;
-	auto StarWarsTexTitle = mTextures["StarWarsTexTitle"]->Resource;
-	auto StarWarsTexMenu = mTextures["StarWarsTexMenu"]->Resource;
-	auto StarWarsTexPause = mTextures["StarWarsTexPause"]->Resource;
+	auto AircraftsTexTitle = mTextures["AircraftsTexTitle"]->Resource;
+	auto AircraftsTexMenu = mTextures["AircraftsTexMenu"]->Resource;
+	auto AircraftsTexPause = mTextures["AircraftsTexPause"]->Resource;
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 
@@ -504,16 +504,16 @@ void Game::BuildDescriptorHeaps()
 
 	//StarWars Descriptor
 	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
-	srvDesc.Format = StarWarsTexTitle->GetDesc().Format;
-	md3dDevice->CreateShaderResourceView(StarWarsTexTitle.Get(), &srvDesc, hDescriptor);
+	srvDesc.Format = AircraftsTexTitle->GetDesc().Format;
+	md3dDevice->CreateShaderResourceView(AircraftsTexTitle.Get(), &srvDesc, hDescriptor);
 	//StarWars Descriptor
 	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
-	srvDesc.Format = StarWarsTexMenu->GetDesc().Format;
-	md3dDevice->CreateShaderResourceView(StarWarsTexMenu.Get(), &srvDesc, hDescriptor);
+	srvDesc.Format = AircraftsTexMenu->GetDesc().Format;
+	md3dDevice->CreateShaderResourceView(AircraftsTexMenu.Get(), &srvDesc, hDescriptor);
 	//StarWars Descriptor
 	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
-	srvDesc.Format = StarWarsTexPause->GetDesc().Format;
-	md3dDevice->CreateShaderResourceView(StarWarsTexPause.Get(), &srvDesc, hDescriptor);
+	srvDesc.Format = AircraftsTexPause->GetDesc().Format;
+	md3dDevice->CreateShaderResourceView(AircraftsTexPause.Get(), &srvDesc, hDescriptor);
 }
 
 void Game::BuildShadersAndInputLayout()
@@ -637,9 +637,9 @@ void Game::BuildMaterials()
 	CreateMaterials("Eagle", XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.05f, 0.05f, 0.05f), 0.2f);
 	CreateMaterials("Raptor", XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.05f, 0.05f, 0.05f), 0.2f);
 	CreateMaterials("Desert", XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.05f, 0.05f, 0.05f), 0.2f);
-	CreateMaterials("StarWars_Title", XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.05f, 0.05f, 0.05f), 0.2f);
-	CreateMaterials("StarWars_Menu", XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.05f, 0.05f, 0.05f), 0.2f);
-	CreateMaterials("StarWars_Pause", XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.05f, 0.05f, 0.05f), 0.2f);
+	CreateMaterials("Aircrafts_Title", XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.05f, 0.05f, 0.05f), 0.2f);
+	CreateMaterials("Aircrafts_Menu", XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.05f, 0.05f, 0.05f), 0.2f);
+	CreateMaterials("Aircrafts_Pause", XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.05f, 0.05f, 0.05f), 0.2f);
 }
 
 void Game::CreateMaterials(std::string Name, XMFLOAT4 DiffuseAlbedo, XMFLOAT3 FresnelR0, float Roughness)

@@ -9,7 +9,7 @@ MenuState::MenuState(StateStack* stack, Context* context) : State(stack, context
     mContext->game->BuildMaterials();
 
     std::unique_ptr<SpriteNode> backgroundSprite = std::make_unique<SpriteNode>(this);
-    backgroundSprite->SetMatGeoDrawName("StarWars_Menu", "boxGeo", "box");
+    backgroundSprite->SetMatGeoDrawName("Aircrafts_Menu", "boxGeo", "box");
     backgroundSprite->setScale(60, 1.0, 50.0);
     backgroundSprite->setPosition(0, 0, 0);
     mSceneGraph->attachChild(std::move(backgroundSprite));
